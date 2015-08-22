@@ -1,0 +1,41 @@
+[
+  {
+    "name": "filter[where]",
+    "description": "Filter results based on a criterion",
+    "in": "query",
+    "type": "object"
+  },
+  {
+    "name": "filter[order]",
+    "description": "Filter results based on a criterion",
+    "in": "query",
+    "type": "string"
+  },
+  {
+    "name": "filter[include]",
+    "description": "Include related object based on foreign key",
+    "in": "query",
+    "type": "string"
+  },
+  {
+    "name": "filter[fields]",
+    "description": "Return subset of fields (Not implemented yet)",
+    "in": "query",
+    "type": "array",
+    "items": {
+      "type": "string"
+    }
+  },
+  {
+    "name": "filter[offset]",
+    "description": "Skips {n} number of records",
+    "in": "query",
+    "type": "integer"
+  },
+  {
+    "name": "filter[limit]",
+    "description": "Limit the results to integer (default 100)",
+    "in": "query",
+    "type": "integer"
+  }
+]

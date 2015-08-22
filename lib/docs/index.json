@@ -1,0 +1,16 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "FlexSites API",
+    "description": "The API used by all FlexSites applications",
+    "version": "1.0.0"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+  },
+  "definitions": {
+  },
+  "basePath": "/api/v1"
+}
