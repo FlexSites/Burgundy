@@ -3,7 +3,7 @@ export default {
   base: 'message',
   public: true,
   attributes: {
-    identity: { type: 'String', required: true },
+    name: { type: 'String', required: true },
     phone: { type: 'String' }
   }
 };
