@@ -1,6 +1,6 @@
 require('dotenv').load({
   silent: true
 });
-require('newrelic');
+if (process.NODE_ENV === 'prod') require('newrelic');
 require('babel/register');
 require('./app');
