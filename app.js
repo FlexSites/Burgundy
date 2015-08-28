@@ -7,6 +7,11 @@ import initDB from './init/models';
 import { NotFound } from './lib/error';
 import apiUtil from './lib/api-util';
 
+import cookieParser from 'cookie-parser';
+import featureClient from 'feature-client';
+import xprExpress from 'xpr-express';
+import xprToggle from 'xpr-toggle';
+
 // Middlewares
 import { json } from 'body-parser';
 import swaggerUi from 'swaggerize-ui';
@@ -28,13 +33,27 @@ var app = express();
 const DOCS_PATH = '/docs';
 const SWAGGER_PATH = '/api-docs';
 
+featureClient.use(xprExpress());
+featureClient.use(xprToggle());
+
+featureClient.configure({
+  featureUrl: 'https://flexprmntl.herokuapp.com',
+  devKey: '1f4d2450-1592-4ea1-8442-4ea5d7dde5f7',
+  experiments: ['testExp1', 'testExp2']
+});
+
+featureClient.cron('* * * * * *');
+
 global.__root = __dirname;
 
-initDB(app)
+featureClient.announce()
+  .then(() => initDB(app))
   .then((models) => {
 
     // Redirect Apex domains to www
     app.use(wwwRedirect());
+
+    app.use(cookieParser());
 
     // Parse JSON requests
     app.use(json({ extended: true }));
@@ -58,11 +77,14 @@ initDB(app)
     // Stormpath Config
     app.use(stormpathInit(app));
 
+    app.use(featureClient.express);
+    app.use(featureClient.toggle);
+
     app.get('/api/v1/sessions', (req, res, next) => {
       if (req.user) {
 
         // Add the isAdmin flag
-        req.user.isAdmin = !!req.user.groups.items.find(function(item){
+        req.user.isAdmin = !!req.user.groups.items.find(function(item) {
           return item.name === 'Admin';
         });
 
@@ -91,7 +113,7 @@ initDB(app)
       res.status(err.status || 500).send(err);
     });
 
-    app.listen(process.env.PORT || 3000, function(){
+    app.listen(process.env.PORT || 3000, function() {
       console.log('Startup complete');
     });
   });
