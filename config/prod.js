@@ -3,5 +3,8 @@ export default {
     s3: {
       bucket: 'flex-sites'
     }
+  },
+  stormpath: {
+    cache: 'redis'
   }
 };
