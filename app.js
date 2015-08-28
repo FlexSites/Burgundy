@@ -71,8 +71,9 @@ featureClient.announce()
       res.send({ message: 'Template for site ' + req.hostname + ' cleared successfully' });
     });
 
+
     // Static Proxy
-    app.use(staticProxy());
+    app.use(staticProxy(['/xprmntl/xpr-toggle.js']));
 
     // Stormpath Config
     app.use(stormpathInit(app));
