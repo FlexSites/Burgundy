@@ -5,7 +5,7 @@ import express from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
 
-export default function() {
+export default function(ignores = []) {
 
   let isFile = /\.[a-z0-9]{2,4}$/
     , prefixMatch = /^(?:https?:\/\/)?(?:www|local|test)?\.?(.*)$/
@@ -13,7 +13,7 @@ export default function() {
 
 
   return (req, res, next) => {
-    if (!isFile.test(req.url)) return next();
+    if (!isFile.test(req.url) || ~ignores.indexOf(req.path)) return next();
     req.url = `/${removePrefix(req.hostname)}/public${req.url}`;
     middleware(req, res, next);
   };
