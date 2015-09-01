@@ -19,6 +19,8 @@ import stormpathInit from './middleware/stormpath-init';
 import stormpath from 'express-stormpath';
 import wwwRedirect from './middleware/www-redirect';
 
+import requestSigner from './middleware/request-signer';
+
 // Router
 import staticProxy from './middleware/static-proxy';
 import pageRender from './middleware/page-render';
@@ -57,6 +59,8 @@ featureClient.announce()
 
     // Parse JSON requests
     app.use(json({ extended: true }));
+
+    app.use('/api/v1/media/sign', siteInjector(app), requestSigner(app));
 
     // Swagger Spec
     app.use(SWAGGER_PATH, augmentDocs(models));
