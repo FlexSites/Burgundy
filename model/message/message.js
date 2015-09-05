@@ -1,3 +1,5 @@
+import ago from 'ago';
+
 export default {
   identity: 'message',
   base: 'site-owned',
@@ -5,7 +7,16 @@ export default {
     toEmail: { type: 'String', required: true },
     fromEmail: { type: 'String', required: true },
     type: { type: 'String', required: true },
-    body: { type: 'String', required: true }
+    body: { type: 'String', required: true },
+    ago: function() {
+      console.log(ago(this.createdAt().getTime(), 'ms'));
+      return ago(this.createdAt().getTime(), 'ms');
+    },
+
+    toJSON: function() {
+      this.ago = this.ago();
+      return this;
+    }
   },
   acls: [
     {

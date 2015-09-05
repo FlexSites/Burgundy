@@ -1,0 +1,90 @@
+post:
+  summary: Login | Create a session
+  description: |
+    This endpoint logs a user in, and returns a session cookie to be used for
+    subsequest request to continue to be authenticated
+  tags:
+    - Authentication
+  parameters:
+    - name: username
+      in: formData
+      description: The user's username (usuallly firstname.lastname)
+      required: true
+      type: string
+    - name: password
+      in: formData
+      description: The user's password
+      required: true
+      type: string
+      format: password
+  responses:
+    201:
+      description: The User object of the user that just logged in
+      schema:
+        type: object
+        $ref: '#/definitions/User'
+    401:
+      description: |
+        An Object that contains some general kobol status information as well
+        as information on each external connection
+      schema:
+        type: object
+        $ref: '#/definitions/UnauthorizedError'
+patch:
+  summary: Create a masquerade session
+  description: |
+    This endpoint logs a user in, and returns a session cookie to be used for
+    subsequest request to continue to be authenticated
+  tags:
+    - Authentication
+  parameters:
+    - name: id
+      in: formData
+      description: The user's badgeId (send null to remove masquerade)
+      required: true
+      type: string
+  responses:
+    200:
+      description: The User object of the user that just logged in
+      schema:
+        type: object
+        $ref: '#/definitions/User'
+    401:
+      description: |
+        An Object that contains some general kobol status information as well
+        as information on each external connection
+      schema:
+        $ref: '#/definitions/UnauthorizedError'
+    403:
+      description: |
+        You'll get this reponse if the user does not have the correct
+        permissions
+      schema:
+        $ref: '#/definitions/ForbiddenError'
+delete:
+  summary: Logout | Remove the session
+  description: |
+    This endpoint logs a user out, and will clear any `remember me` cookie that
+    may have existed
+  tags:
+    - Authentication
+  responses:
+    204:
+      description: The user was successfully logged out
+get:
+  summary: User Info | Get current session
+  description: |
+    The endpoint gets the current session's user information
+  tags:
+    - Authentication
+  responses:
+    200:
+      description: The User object of the user that just logged in
+      schema:
+        type: object
+        $ref: '#/definitions/User'
+    404:
+      description: No valid session was found
+      schema:
+        type: object
+        $ref: '#/definitions/NotFoundError'

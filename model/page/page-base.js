@@ -1,5 +1,5 @@
 export default {
-  identity: 'pagebase',
+  identity: 'page-base',
   base: 'site-owned',
   attributes: {
     title: {
