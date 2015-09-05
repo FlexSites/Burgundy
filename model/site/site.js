@@ -59,24 +59,29 @@ export default {
       collection: 'testimonial',
       via: 'site'
     },
-    staticpages: {
-      collection: 'dynamic-page',
-      via: 'site'
-    },
     pages: {
       collection: 'page',
       via: 'site'
     }
   },
-  middleware: {
-    beforeAccess: (req, res, next) => {
-      if (!req.user) return next();
+  lifecycle: {
+    beforeAccess: (query, { user }) => {
+      if (!user) return;
 
-      let hosts = req.user.groups.items.map(group => group.name);
+      let hosts = user.groups.items.map(group => group.name);
 
-      if (!~hosts.indexOf('Admin')) objectPath.set(req, 'query.filter.where.host', hosts);
+      if (!~hosts.indexOf('Admin')) objectPath.set(query, 'filter.where.host', hosts);
+    },
+    beforeUpdate: (instance, { user }) => {
+      [
+        'testimonials',
+        'pages',
+      ].forEach(key => {
+        let val = instance[key];
+        if (!val || !val.length) delete instance[key];
+      });
 
-      next();
+      return instance;
     }
   }
 };

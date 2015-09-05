@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
+import getModels from 'express-waterline';
 
 export default function(app) {
-  var Site = app.get('models').site;
   var siteMap = { host: {}, id: {} };
 
   return function(req, res, next) {
@@ -16,6 +16,7 @@ export default function(app) {
 
     getSite(type, value)
       .then((site) => {
+        if (!site) throw new Error('Invalid site identifier!');
         req.flex = { site };
       })
       .then(next)
@@ -30,11 +31,12 @@ export default function(app) {
     let query = {};
     query[type] = value;
 
-    return Site
-      .findOne(query)
-      .then((site = {}) => {
-        if (site.id) siteMap.host[site.host] = siteMap.id[site.id] = site;
-        return site;
-      });
+    return getModels('site')
+      .then(Site => Site.findOne(query)
+        .then((site = {}) => {
+          if (site.id) siteMap.host[site.host] = siteMap.id[site.id] = site;
+          return site;
+        })
+      );
   }
 }

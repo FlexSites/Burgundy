@@ -30,11 +30,10 @@ export default {
       type: 'string'
     }
   },
-  middleware: {
-    beforeAccess: (req, res, next) => {
-      if (!req.user) return next();
-      if (req.flex.site.type === 'entertainer') set(req, 'query.filter.where.website', req.flex.site.host);
-      next();
+  lifecycle: {
+    beforeAccess: (query, { user, flex: { site } }) => {
+      if (!user) return;
+      if (site.type === 'entertainer') set(query, 'filter.where.website', site.host);
     }
   }
 };

@@ -1,9 +1,20 @@
 'use strict';
 
+import path from 'path';
 import express from 'express';
 
 // Initialization
-import initDB from './init/models';
+import waterline from './init/waterline';
+import stormpathInit from './init/stormpath';
+import cors from 'cors';
+
+// Documentation
+import swaggerize from 'swaggerize-express';
+import swaggerDocs from 'swaggerize-docs';
+import swaggerUi from 'swaggerize-ui';
+import augmentDocs from './middleware/augment-docs';
+
+// Util
 import { NotFound } from './lib/error';
 import apiUtil from './lib/api-util';
 
@@ -12,28 +23,26 @@ import featureClient from 'feature-client';
 import xprExpress from 'xpr-express';
 import xprToggle from 'xpr-toggle';
 
-// Middlewares
-import { json } from 'body-parser';
-import swaggerUi from 'swaggerize-ui';
-import stormpathInit from './middleware/stormpath-init';
-import stormpath from 'express-stormpath';
-import wwwRedirect from './middleware/www-redirect';
-
+// AWS
 import requestSigner from './middleware/request-signer';
 
 // Router
 import staticProxy from './middleware/static-proxy';
 import pageRender from './middleware/page-render';
 
-// API
-import resourceRouter from './middleware/api/resource-router';
-import magic from './middleware/api/magic';
+// FlexSites custom
+import wwwRedirect from './middleware/www-redirect';
 import siteInjector from './middleware/site-injector';
-import augmentDocs from './middleware/augment-docs';
+
+// API
+import { json } from 'body-parser';
+import stormpath from 'express-stormpath';
 
 var app = express();
-const DOCS_PATH = '/docs';
-const SWAGGER_PATH = '/api-docs';
+const DOCS_DIR       = path.join(__dirname, 'docs');
+const ROUTES_DIR     = path.join(__dirname, 'routes');
+const DOCS_URI       = '/docs';
+const SWAGGER_URI    = '/api-docs';
 
 featureClient.use(xprExpress());
 featureClient.use(xprToggle());
@@ -49,8 +58,14 @@ featureClient.cron('* * * * * *');
 global.__root = __dirname;
 
 featureClient.announce()
-  .then(() => initDB(app))
-  .then((models) => {
+  .then(() => swaggerDocs(path.join(__dirname, 'docs')))
+  .then((api) => {
+
+    app.use(cors());
+
+    app.use(SWAGGER_URI, (req, res, next) => {
+      res.send(app.swagger.api);
+    })
 
     // Redirect Apex domains to www
     app.use(wwwRedirect());
@@ -60,21 +75,12 @@ featureClient.announce()
     // Parse JSON requests
     app.use(json({ extended: true }));
 
-    app.use('/api/v1/media/sign', siteInjector(app), requestSigner(app));
-
-    // Swagger Spec
-    app.use(SWAGGER_PATH, augmentDocs(models));
-
-    // Swagger UI
-    app.use(DOCS_PATH, swaggerUi({ docs: SWAGGER_PATH }));
-
     // Cache bust
     let util = apiUtil(app);
     app.get('/sex-panther', function(req, res) {
       util.clearTemplate(req);
       res.send({ message: 'Template for site ' + req.hostname + ' cleared successfully' });
     });
-
 
     // Static Proxy
     app.use(staticProxy(['/xprmntl/xpr-toggle.js']));
@@ -85,20 +91,6 @@ featureClient.announce()
     app.use(featureClient.express);
     app.use(featureClient.toggle);
 
-    app.get('/api/v1/sessions', (req, res, next) => {
-      if (req.user) {
-
-        // Add the isAdmin flag
-        req.user.isAdmin = !!req.user.groups.items.find(function(item) {
-          return item.name === 'Admin';
-        });
-
-        return res.send([ req.user ]);
-      }
-
-      next(new NotFound('Session not found'));
-    });
-
     app.use(siteInjector(app));
 
     // Check that they're in the right group
@@ -108,10 +100,14 @@ featureClient.announce()
     });
 
     // API
-    app.use('/api/:version/:resource', magic(app), resourceRouter(app));
+    app.use('/api/:version', swaggerize({
+      api,
+      docspath: SWAGGER_URI,
+      handlers: ROUTES_DIR
+    }), waterline);
 
     // Page Render
-    app.get('/:resource?/:id?', magic(app), pageRender(app));
+    app.get('/:resource?/:id?', pageRender(app));
 
     app.use((err, req, res, next) => {
       console.log('Found err', err.stack);
@@ -119,8 +115,12 @@ featureClient.announce()
     });
 
     app.listen(process.env.PORT || 3000, function() {
-      console.log('Startup complete');
+      console.log('Startup complete', process.env.PORT || 3000);
     });
+  })
+  .catch(ex => {
+    console.error('Horrible problem', ex);
+    process.exit(1);
   });
 
 
