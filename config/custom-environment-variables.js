@@ -6,8 +6,5 @@ export default {
     s3: {
       bucket: 'S3_BUCKET'
     }
-  },
-  redis: {
-    url: 'REDIS_URL'
   }
-};
+}
