@@ -55,6 +55,9 @@ Promise.all([
 ])
 .then(([api]) => {
 
+  // Health Check
+  app.get('/ping', (req, res) => res.send({ pong: true }));
+
   // XPRMNTL
   app.use(featureClient.express, featureClient.toggle);
 
