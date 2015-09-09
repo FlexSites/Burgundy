@@ -1,10 +1,8 @@
 
-import { NotFound } from '../lib/error';
+import { NotFound } from '../../../lib/error';
 
-console.log('sessions loaded');
 export default {
   get: (req, res, next) => {
-    console.log('session called');
     if (req.user) {
 
       // Add the isAdmin flag

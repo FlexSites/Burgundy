@@ -1,0 +1,13 @@
+get:
+  summary: Sign an upload request for AWS S3
+  tags:
+    - Media
+  description: |
+    Get the entire contact
+  responses:
+    200:
+      description: |
+        Returns the given contact
+      schema:
+        type: object
+        $ref: '#/definitions/Contact'
