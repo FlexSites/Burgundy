@@ -27,7 +27,7 @@
     "cors": "^2.7.1",
     "dotenv": "^1.2.0",
     "express": "^4.13.3",
-    "express-stormpath": "^2.0.3",
+    "express-stormpath": "^1.0.6",
     "express-waterline": "^0.2.0",
     "feature-client": "^1.0.1",
     "flat": "^1.6.0",
