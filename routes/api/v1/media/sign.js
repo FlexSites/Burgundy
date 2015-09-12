@@ -1,10 +1,15 @@
-import aws from 'aws-sdk';
+import Promise from 'bluebird';
 import path from 'path';
 import crypto from 'crypto';
 
-var s3 = new aws.S3({
-  accessKeyId: process.env.S3_KEY,
-  secretAccessKey: process.env.S3_SECRET
+import { signUpload } from '../../../../lib/aws/s3';
+
+let random = Promise.promisify(crypto.randomBytes.bind(crypto, 16));
+
+let getFilename = Promise.method(({ query: { name, mediumId }, flex: { site: { host } } }) => {
+  if (mediumId) return `${host}/${mediumId}/original`;
+  return random()
+      .then(buf => `tmp/${buf.toString('hex')}`);
 });
 
 export default {
@@ -12,30 +17,11 @@ export default {
 
     let { name, type } = req.query;
 
-    if (!process.env.S3_KEY || !process.env.S3_USER_FILES || !process.env.S3_SECRET) return next('Missing AWS credentials');
-
-    let site = req.flex.site;
-    if (!site || !site.host) return next('Invalid host');
-
-    random(function(err, hash) {
-      var filename = `${site.host}/${hash}.${path.extname(name)}`.toLowerCase();
-
-      s3.getSignedUrl('putObject', {
-        Bucket: process.env.S3_USER_FILES,
-        Key: filename,
-        Expires: 60,
-        ContentType: type,
-        ACL: 'public-read'
-      }, function(err, data) {
-        if (err) return next(err);
-        res.send({ signed_request: data });
-      });
-    });
+    getFilename(req)
+      .then(filename => `${filename}${path.extname(name)}`.toLowerCase())
+      .then(filename => signUpload(filename, type)
+        .then(data => res.send({ signed_request: data }))
+      )
+      .catch(next);
   }
-}
-
-function random(cb) {
-  return crypto.randomBytes(16, function(ex, buf) {
-    cb(ex, buf.toString('hex'));
-  });
-}
+};
