@@ -1,8 +1,12 @@
 {
   "name": "flex-sites",
   "version": "0.1.0",
-  "description": "",
+  "description": "FlexSites API/Server",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FlexSites/Burgundy.git"
+  },
   "scripts": {
     "start": "node index",
     "watch": "node-dev index",
