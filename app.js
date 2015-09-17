@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { json } from 'body-parser';
 import stormpath from 'express-stormpath';
+import Promise from 'bluebird';
 
 // Documentation
 import swaggerize from 'swaggerize-express';
@@ -23,7 +24,6 @@ import pageRender from './middleware/page-render';
 // FlexSites custom
 import wwwRedirect from './middleware/www-redirect';
 import siteInjector from './middleware/site-injector';
-import transaction from './middleware/newrelic-transaction-namer';
 
 const DOCS_DIR       = path.join(__dirname, 'docs');
 const ROUTES_DIR     = path.join(__dirname, 'routes');
@@ -74,11 +74,10 @@ Promise.all([
     docspath: SWAGGER_URI,
     handlers: ROUTES_DIR
   }));
-  app.use('/api/:version/:resource?/:id?', transaction);
   app.use('/api/:version', waterline);
 
   // Page Render
-  app.get('/:resource?/:id?', transaction, pageRender(app));
+  app.get('/:resource?/:id?', pageRender(app));
 
   app.use((err, req, res, next) => {
     console.error(err.message);
