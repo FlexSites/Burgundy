@@ -1,10 +1,12 @@
 'use strict';
 
 import { getYoutubeId } from '../../lib/string-util';
-import { find, assign, remove } from '../../lib/aws/s3';
+import { find, assign, remove, variation, UPLOAD_HOST } from '../../lib/aws/s3';
+import transform from '../../lib/blitline';
 import getModels from 'express-waterline';
 import url from 'url';
 import path from 'path';
+import mime from 'mime';
 
 export default {
   identity: 'medium',
@@ -13,18 +15,23 @@ export default {
   attributes: {
     type: {
       type: 'string',
-      // required: true
+      in: ['hero', 'profile', 'background', 'ad', 'video', 'other'],
+      required: true
+    },
+    subtype: {
+      type: 'string'
     },
     filetype: {
       type: 'string'
     },
-    identity: {
+    name: {
       type: 'string',
-      // required: true
+      required: true
     },
     src: {
       type: 'string',
-      // required: true
+      // urlish: true,
+      required: true
     },
     description: {
       type: 'string'
@@ -33,7 +40,7 @@ export default {
     thumbnail: function() {
       let id = getYoutubeId(this.src);
       if (id) return `http://img.youtube.com/vi/${id}/0.jpg`;
-      return this.src;
+      return UPLOAD_HOST + variation('thumb', this.src);
     },
 
     embed: function() {
@@ -49,10 +56,14 @@ export default {
     }
   },
   lifecycle: {
+    beforeCreate: (ins, req) => {
+      if (!ins.filetype && ins.type !== 'video') ins.filetype = mime.lookup(ins.src);
+    },
     afterCreate: (ins, req) => {
       return assign(ins.src, ins.id, req.flex.site.host)
         .then(({ from, to }) => {
           ins.src = to;
+          transform(ins.type, ins.src)
           return ins;
         })
         .then(() => getModels('medium'))
