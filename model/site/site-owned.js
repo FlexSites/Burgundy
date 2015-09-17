@@ -17,7 +17,7 @@ export default {
       if (site) objectPath.set(query, 'where.site', site.id);
     },
 
-    beforeSave: (instance, { user, flex: { site } }) => {
+    beforeCreate: (instance, { user, flex: { site } }) => {
       if (instance && !instance.id) {
         if (!instance.site) {
           if (!site) throw new Error('Saving object to undefined site');

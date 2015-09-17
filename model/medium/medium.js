@@ -1,7 +1,10 @@
 'use strict';
 
 import { getYoutubeId } from '../../lib/string-util';
-
+import { find, assign, remove } from '../../lib/aws/s3';
+import getModels from 'express-waterline';
+import url from 'url';
+import path from 'path';
 
 export default {
   identity: 'medium',
@@ -43,6 +46,25 @@ export default {
       this.embed = this.embed();
       this.thumbnail = this.thumbnail();
       return this;
+    }
+  },
+  lifecycle: {
+    afterCreate: (ins, req) => {
+      return assign(ins.src, ins.id, req.flex.site.host)
+        .then(({ from, to }) => {
+          ins.src = to;
+          return ins;
+        })
+        .then(() => getModels('medium'))
+        .then(Media => Media.update({ id: ins.id }, ins))
+        .then(() => ins);
+    },
+
+    afterDelete: (ins) => {
+      let { host, pathname } = url.parse(ins.src, false, true);
+      if (host !== 'uploads.flexsites.io') return ins;
+      return find(path.dirname(pathname).substr(1))
+        .then(remove);
     }
   }
 };
