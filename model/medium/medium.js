@@ -2,6 +2,8 @@
 
 import { getYoutubeId } from '../../lib/string-util';
 
+import { assign } from '../../lib/aws/s3';
+import getModels from 'express-waterline';
 
 export default {
   identity: 'medium',
@@ -43,6 +45,18 @@ export default {
       this.embed = this.embed();
       this.thumbnail = this.thumbnail();
       return this;
+    }
+  },
+  lifecycle: {
+    afterCreate: (ins, req) => {
+      return assign(ins.src, ins.id, req.flex.site.host)
+        .then(({ from, to }) => {
+          ins.src = to;
+          return ins;
+        })
+        .then(() => getModels('medium'))
+        .then(Media => Media.update({ id: ins.id }, ins))
+        .then(() => ins);
     }
   }
 };
