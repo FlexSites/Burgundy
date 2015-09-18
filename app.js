@@ -15,7 +15,7 @@ import swaggerDocs from 'swaggerize-docs';
 // Initialization
 import waterline from './init/waterline';
 import stormpathInit from './init/stormpath';
-import featureClient from './init/xprmntl';
+// import featureClient from './init/xprmntl';
 
 // Router
 import staticProxy from './middleware/static-proxy';
@@ -52,7 +52,7 @@ app.use(siteInjector(app));
 
 Promise.all([
   swaggerDocs(DOCS_DIR),
-  featureClient.announce()
+  // featureClient.announce()
 ])
 .then(([api]) => {
 
@@ -60,7 +60,7 @@ Promise.all([
   app.get('/ping', (req, res) => res.send({ pong: true }));
 
   // XPRMNTL
-  app.use(featureClient.express, featureClient.toggle);
+  // app.use(featureClient.express, featureClient.toggle);
 
   // Check that they're in the right group
   app.use((req, res, next) => {
