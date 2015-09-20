@@ -1,23 +1,29 @@
+import { Schema } from 'mongoose';
+
+let ObjectId = Schema.Types.ObjectId;
+
 export default {
   identity: 'ticket',
   base: 'persisted',
   public: true,
   attributes: {
     status: {
-      type: 'string',
+      type: String,
       required: true
     },
     type: {
-      type: 'string'
+      type: String
     },
     price: {
-      type: 'number'
+      type: Number
     },
     seat: {
-      model: 'seat'
+      ref: 'Seat',
+      type: ObjectId
     },
     showtime: {
-      model: 'showtime'
+      type: ObjectId,
+      ref: 'Showtime'
     }
   }
 };

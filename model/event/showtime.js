@@ -4,15 +4,16 @@ export default {
   public: true,
   attributes: {
     date: {
-      type: 'date',
+      type: Date,
       required: true
     },
     tickets: {
-      collection: 'ticket',
-      via: 'showtime'
+      ref: 'Ticket',
+      type: String
     },
     event: {
-      model: 'event'
+      ref: 'Event',
+      type: String,
     }
   }
 };

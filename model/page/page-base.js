@@ -3,15 +3,15 @@ export default {
   base: 'site-owned',
   attributes: {
     title: {
-      type: 'string',
+      type: String,
       required: true
     },
     description: {
-      type: 'string',
+      type: String,
       required: true
     },
     format: {
-      type: 'string',
+      type: String,
       required: true
     }
   }

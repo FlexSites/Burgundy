@@ -1,24 +1,29 @@
+import { Schema } from 'mongoose';
+
+let ObjectId = Schema.Types.ObjectId;
+
 export default {
   identity: 'page',
   base: 'page-base',
   public: true,
   attributes: {
     url: {
-      type: 'string',
+      type: String,
       required: true
     },
     templateUrl: {
-      type: 'string'
+      type: String
     },
     content: {
-      type: 'string'
+      type: String
     },
     isPublished: {
-      type: 'string'
+      type: String
     },
-    media: {
-      type: 'array'
-    }
+    media: [{
+      type: ObjectId,
+      ref: 'Medium'
+    }]
   }
 };
 

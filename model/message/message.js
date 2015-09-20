@@ -8,15 +8,20 @@ export default {
     fromEmail: { type: 'String', required: true },
     type: { type: 'String', required: true },
     body: { type: 'String', required: true },
-    ago: function() {
-      console.log(ago(this.createdAt().getTime(), 'ms'));
-      return ago(this.createdAt().getTime(), 'ms');
-    },
 
-    toJSON: function() {
-      this.ago = this.ago();
-      return this;
+  },
+  virtuals: {
+    ago: {
+      get: function() {
+        console.log(ago(this.createdAt().getTime(), 'ms'));
+        return ago(this.createdAt().getTime(), 'ms');
+      }
     }
+    // toJSON: function() {
+    //   this.ago = this.ago();
+    //   return this;
+    // }
+
   },
   acls: [
     {

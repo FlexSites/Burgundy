@@ -4,18 +4,18 @@ export default {
   public: true,
   attributes: {
     url: {
-      type: 'string',
+      type: String,
       required: true
     },
     templateUrl: {
-      type: 'string'
+      type: String
     },
     title: {
-      type: 'string',
+      type: String,
       required: true
     },
     description: {
-      type: 'string',
+      type: String,
       required: true
     }
   },

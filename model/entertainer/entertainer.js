@@ -5,30 +5,33 @@ export default {
   base: 'persisted',
   public: true,
   attributes: {
-    identity: {
-      type: 'string',
+    name: {
+      type: String,
       required: true
     },
     credits: {
-      type: 'string',
+      type: String,
       required: true
     },
     description: {
-      type: 'string',
+      type: String,
       required: true
     },
     facebook: {
-      type: 'string'
+      type: String
     },
     website: {
-      type: 'string'
+      type: String
     },
     media: {
-      type: 'array'
+      type: [String]
     },
     siteId: {
-      type: 'string'
-    }
+      type: String
+    },
+    events: {
+      type: [String]
+    },
   },
   lifecycle: {
     beforeAccess: (query, { user, flex: { site } }) => {

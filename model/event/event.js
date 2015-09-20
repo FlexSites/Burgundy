@@ -1,67 +1,79 @@
+import mongoose, { Schema } from 'mongoose';
+
+let ObjectId = Schema.Types.ObjectId;
+
 export default {
   identity: 'event',
   base: 'site-owned',
   public: true,
+  types: {
+    referencedBy: function(value){
+      return Array.isArray(value) && value.filter(val => {
+        return /[a-f0-9]{24}/.test(val);
+      });
+    }
+  },
   attributes: {
-    identity: {
-      type: 'string',
+    name: {
+      type: String,
       required: true
     },
     type: {
-      type: 'string',
+      type: String,
       default: 'general'
     },
     enabled: {
-      type: 'date'
+      type: Date
     },
     dayofshow: {
-      type: 'number',
+      type: Number,
       default: 0
     },
     doorTime: {
-      type: 'date'
+      type: Date
     },
     description: {
-      type: 'string'
+      type: String
     },
     facebook: {
-      type: 'string'
+      type: String
     },
     link: {
-      type: 'string'
+      type: String
     },
     video: {
-      type: 'string'
+      type: String
     },
-    pricingTiers: [
-      {
-        filter: {
-          type: 'string'
+    entertainers: [{
+      type: ObjectId,
+      ref: 'Entertainer'
+    }],
+    pricingTiers: [{
+      filter: {
+        type: String
+      },
+      sections: [{
+        id: {
+          type: String,
+          required: true
         },
-        sections: [
-          {
-            id: {
-              type:"string",
-              required: true
-            },
-            price: {
-              type: 'number',
-              required: true
-            }
-          }
-        ]
-      }
-    ],
+        price: {
+          type: Number,
+          required: true
+        }
+      }]
+    }],
     showtimes: {
-      collection: 'showtime',
-      via: 'event'
+      type: ObjectId,
+      ref: 'Showtime'
     },
     venue: {
-      model: 'venue'
+      type: ObjectId,
+      ref: 'Venue'
     },
-    media: {
-      type: 'array',
-      model: 'Medium'
-    }
+    media: [{
+      type: ObjectId,
+      ref: 'Medium'
+    }],
   }
 };

@@ -1,28 +1,33 @@
+import { Schema } from 'mongoose';
+
+let ObjectId = Schema.Types.ObjectId;
+
 export default {
   identity: 'section',
   base: 'persisted',
   public: true,
   attributes: {
     type: {
-      type: 'string',
+      type: String,
       default: 'GA'
     },
     identity: {
-      type: 'string',
+      type: String,
       required: true
     },
     color: {
-      type: 'string'
+      type: String
     },
     seatCount: {
-      type: 'number'
+      type: Number
     },
     venue: {
-      model: 'venue'
+      ref: 'Venue',
+      type: ObjectId
     },
     seat: {
-      collection: 'seat',
-      via: 'section'
+      ref: 'Seat',
+      type: ObjectId
     }
   }
 };

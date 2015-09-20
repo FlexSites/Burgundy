@@ -1,17 +1,19 @@
 import Promise from 'bluebird';
-import getModels from 'express-waterline';
+import getModels from '../lib/db';
 
 export default function(app) {
-  var siteMap = { host: {}, id: {} };
+  var siteMap = { host: {}, _id: {} };
+  var isObjectId = /[a-f0-9]{24}/i
 
   return function(req, res, next) {
 
-    var siteId = req.get('X-FlexSite')
-      , type = siteId ? 'id' : 'host'
-      , value = siteId || /^(?:https?:\/\/)?(?:www|local|test)?\.?(.*)$/.exec(req.hostname)[1];
+    var value = req.get('X-FlexSite') || req.hostname
+      , type = 'host';
 
-    if (!value) {
-      return next();
+    if (isObjectId.test(value)) {
+      type = '_id';
+    } else {
+      value = /^(?:https?:\/\/)?(?:www|local|test)?\.?(.*)$/.exec(value)[1];
     }
 
     getSite(type, value)
@@ -34,7 +36,8 @@ export default function(app) {
     return getModels('site')
       .then(Site => Site.findOne(query)
         .then((site = {}) => {
-          if (site.id) siteMap.host[site.host] = siteMap.id[site.id] = site;
+          if (site === null) site = {}
+          if (site._id) siteMap.host[site.host] = siteMap._id[site._id] = site;
           return site;
         })
       );
