@@ -27,10 +27,6 @@ export default {
       ref: 'Section',
       type: ObjectId
     }],
-    events: [{
-      ref: 'Event',
-      type: ObjectId
-    }],
     media: [{
       ref: 'Medium',
       type: ObjectId

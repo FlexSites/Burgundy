@@ -11,7 +11,7 @@ export default {
       type: String,
       default: 'GA'
     },
-    identity: {
+    name: {
       type: String,
       required: true
     },
