@@ -27,9 +27,6 @@ export default {
     beforeSave: function(instance, req){
       if (!instance) return;
 
-      // Flatten Attributes
-      instance = flatten(instance, { delimiter: '_', safe: true });
-
       // Inject Site ID if it was null
       if (get(this, '_attributes.site') && !instance.site) {
         instance.site = req.flex.site.id;
