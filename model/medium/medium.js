@@ -3,7 +3,7 @@
 import { getYoutubeId } from '../../lib/string-util';
 import { find, assign, remove, variation, UPLOAD_HOST } from '../../lib/aws/s3';
 import transform from '../../lib/blitline';
-import getModels from 'express-waterline';
+import getModels from '../../lib/db';
 import url from 'url';
 import path from 'path';
 import mime from 'mime';
@@ -14,56 +14,57 @@ export default {
   public: true,
   attributes: {
     type: {
-      type: 'string',
+      type: String,
       in: ['hero', 'profile', 'background', 'ad', 'video', 'other'],
       required: true
     },
     subtype: {
-      type: 'string'
+      type: String
     },
     filetype: {
-      type: 'string'
+      type: String
     },
     name: {
-      type: 'string',
+      type: String,
       required: true
     },
     src: {
-      type: 'string',
+      type: String,
       // urlish: true,
       required: true
     },
+    thumbnail: {
+      type: String,
+      urlish: true
+    },
     description: {
-      type: 'string'
+      type: String
     },
 
-    thumbnail: function() {
-      let id = getYoutubeId(this.src);
-      if (id) return `http://img.youtube.com/vi/${id}/0.jpg`;
-      return UPLOAD_HOST + variation('thumb', this.src);
-    },
-
-    embed: function() {
-      let id = getYoutubeId(this.src);
-      if (id) return `https://www.youtube.com/embed/${id}`;
-      return this.src;
-    },
-
-    toJSON: function() {
-      this.embed = this.embed();
-      this.thumbnail = this.thumbnail();
-      return this;
+  },
+  virtuals: {
+    embed: {
+      get: function() {
+        let id = getYoutubeId(this.src);
+        if (id) return `https://www.youtube.com/embed/${id}`;
+      }
     }
   },
   lifecycle: {
     beforeCreate: (ins, req) => {
       if (!ins.filetype && ins.type !== 'video') ins.filetype = mime.lookup(ins.src);
+      if (ins.type === 'video') {
+        let id = getYoutubeId(ins.src);
+        if (id) ins.thumbnail = `http://img.youtube.com/vi/${id}/0.jpg`;
+      }
     },
+
     afterCreate: (ins, req) => {
+      if (ins.type === 'video') return ins;
       return assign(ins.src, ins.id, req.flex.site.host)
         .then(({ from, to }) => {
           ins.src = to;
-          transform(ins.type, ins.src)
+          transform(ins.type, ins.src);
           return ins;
         })
         .then(() => getModels('medium'))
@@ -124,8 +125,8 @@ export default {
 //     'sign',
 //     {
 //       http: {path: '/sign', verb: 'get'},
-//       accepts: [{arg: 'name', type: 'string' }, {arg: 'type', type: 'string' }],
-//       returns: {arg: 'signed_request', type: 'string'}
+//       accepts: [{arg: 'name', type: String }, {arg: 'type', type: String }],
+//       returns: {arg: 'signed_request', type: String}
 //     }
 //   );
 
@@ -157,8 +158,8 @@ export default {
 //     'cloudinary',
 //     {
 //       http: {path: '/cloudinary', verb: 'get'},
-//       accepts: [{arg: 'name', type: 'string' }, {arg: 'type', type: 'string' }],
-//       returns: {arg: 'cloudinary_request', type: 'string'}
+//       accepts: [{arg: 'name', type: String }, {arg: 'type', type: String }],
+//       returns: {arg: 'cloudinary_request', type: String}
 //     }
 //   );
 // };

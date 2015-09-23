@@ -1,4 +1,7 @@
 import objectPath from 'object-path';
+import { Schema } from 'mongoose';
+
+let ObjectId = Schema.Types.ObjectId;
 
 export default {
   identity: 'site',
@@ -6,62 +9,66 @@ export default {
   public: true,
   attributes: {
     name: {
-      type: 'string',
+      type: String,
       required: true
     },
     type: {
-      type: 'string',
+      type: String,
       required: true
     },
     repo: {
-      type: 'string',
+      type: String,
       required: true
     },
     host: {
-      type: 'string',
+      type: String,
       required: true
     },
     analytics: {
-      type: 'string',
+      type: String,
       required: true
     },
     title: {
-      type: 'string'
+      type: String
     },
     isSinglePageApp: {
-      type: 'boolean',
+      type: Boolean,
       defaultsTo: false
     },
     styles: {
-      type: 'array'
+      type: [String]
     },
     scripts: {
-      type: 'array'
+      type: [String]
     },
     description: {
-      type: 'string',
+      type: String,
       required: true
     },
     keywords: {
-      type: 'string',
+      type: String,
       required: true
     },
     redirects: {
-      type: 'array'
+      type: [String]
     },
     contact_email: {
-      type: 'string'
+      type: String
     },
     contact_phone: {
-      type: 'string'
+      type: String
     },
     testimonials: {
-      collection: 'testimonial',
-      via: 'site'
+      ref: 'Testimonial',
+      type: ObjectId
     },
     pages: {
-      collection: 'page',
-      via: 'site'
+      ref: 'Page',
+      type: ObjectId
+    },
+    events: {
+      ref: 'Event',
+      type: ObjectId
     }
   },
   lifecycle: {
@@ -70,9 +77,10 @@ export default {
 
       let hosts = user.groups.items.map(group => group.name);
 
-      if (!~hosts.indexOf('Admin')) objectPath.set(query, 'filter.where.host', hosts);
+      if (!~hosts.indexOf('Admin')) objectPath.set(query, 'where.host.$in', hosts);
     },
-    beforeUpdate: (instance, { user }) => {
+
+    beforeUpdate: (instance) => {
       [
         'testimonials',
         'pages',

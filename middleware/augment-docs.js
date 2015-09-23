@@ -43,8 +43,7 @@ export function getModelDefinitions(name, properties, obj) {
    obj[name] = { properties };
 }
 
-export default function augmentDocs(models) {
-  let api = require('../lib/docs');
+export default function augmentDocs(api, models) {
   Object.keys(models)
     .map(key => models[key])
     .filter(model => model.public && model.connection || console.log(model.connection))
@@ -76,6 +75,6 @@ export default function augmentDocs(models) {
   }
 
   // TODO: only add swagger docs for "public" models
-  return (req, res) => res.send(api);
+  return api;
 }
 

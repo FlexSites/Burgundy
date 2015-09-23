@@ -4,17 +4,17 @@ export default {
   public: true,
   attributes: {
     name: {
-      type: 'string'
+      type: String
     },
     email: {
-      type: 'string',
+      type: String,
       required: true
     },
     zip: {
-      type: 'string'
+      type: String
     },
     status: {
-      type: 'string',
+      type: String,
       default: 'S'
     }
   },

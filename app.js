@@ -13,7 +13,7 @@ import swaggerize from 'swaggerize-express';
 import swaggerDocs from 'swaggerize-docs';
 
 // Initialization
-import waterline from './init/waterline';
+import {init as mongoose} from './lib/db';
 import stormpathInit from './init/stormpath';
 // import featureClient from './init/xprmntl';
 
@@ -25,9 +25,9 @@ import pageRender from './middleware/page-render';
 import wwwRedirect from './middleware/www-redirect';
 import siteInjector from './middleware/site-injector';
 
-const DOCS_DIR       = path.join(__dirname, 'docs');
-const ROUTES_DIR     = path.join(__dirname, 'routes');
-const SWAGGER_URI    = '/api-docs';
+const DOCS_DIR = path.join(__dirname, 'docs');
+const ROUTES_DIR = path.join(__dirname, 'routes');
+const SWAGGER_URI = '/api-docs';
 
 global.__root = __dirname;
 
@@ -74,7 +74,11 @@ Promise.all([
     docspath: SWAGGER_URI,
     handlers: ROUTES_DIR
   }));
-  app.use('/api/:version', waterline);
+
+  app.use('/api/:version', mongoose({
+    url: process.env.MONGOLAB_URI,
+    dir: path.join(__dirname, 'model')
+  }));
 
   // Page Render
   app.get('/:resource?/:id?', pageRender(app));

@@ -1,20 +1,25 @@
 'use strict';
 
 import objectPath from 'object-path';
+import { Schema } from 'mongoose';
+
+let ObjectId = Schema.Types.ObjectId;
+
 
 export default {
   identity: 'site-owned',
   base: 'persisted',
   attributes: {
     site: {
-      model: 'site',
+      type: ObjectId,
+      ref: 'Site',
       required: true
     }
   },
   lifecycle: {
     beforeAccess: (query, { flex: { site } }) => {
       // If there's a siteId in the request, only show related models
-      if (site) objectPath.set(query, 'where.site', site.id);
+      objectPath.set(query, 'where.site', site.id || site._id);
     },
 
     beforeCreate: (instance, { user, flex: { site } }) => {

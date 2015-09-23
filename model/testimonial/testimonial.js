@@ -3,8 +3,8 @@ export default {
   base: 'site-owned',
   public: true,
   attributes: {
-    quote: { type: 'String', required: true },
-    author: { type: 'String', required: true },
-    company: { type: 'String', required: true },
+    quote: { type: String, required: true },
+    author: { type: String, required: true },
+    company: { type: String, required: true },
   }
 };
