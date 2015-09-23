@@ -8,7 +8,7 @@ export default {
   public: true,
   attributes: {
     name: { type: String, required: true },
-    shortidentity: { type: String, required: true },
+    shortName: { type: String, required: true },
     address: {
       street: { type: String, required: true },
       suite: { type: String },

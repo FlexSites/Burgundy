@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import moment from 'moment';
 
 let ObjectId = Schema.Types.ObjectId;
 
@@ -6,11 +7,54 @@ export default {
   identity: 'event',
   base: 'site-owned',
   public: true,
-  types: {
-    referencedBy: function(value){
-      return Array.isArray(value) && value.filter(val => {
-        return /[a-f0-9]{24}/.test(val);
-      });
+  virtuals: {
+    video: {
+      get: function() {
+        if (this.media) {
+          let video = this.media.find(element => element.type === 'video');
+          if (video) return video.src;
+        }
+      }
+    },
+    priceRange: {
+      get: function() {
+        let prices = this.pricingTiers.reduce((prev, curr) => {
+          return prev.concat(curr.sections.map(section => section.price));
+        }, []);
+
+        prices = prices
+          .filter(v => ~prices.indexOf(v))
+          .sort();
+        let low = prices[0];
+        let high = prices[prices.length - 1];
+        let str = '$' + low;
+        if (!low) str = 'Free';
+        if (low !== high) str += ' - $' + high;
+        return str;
+      }
+    },
+    dateRange: {
+      get: function() {
+        if (this.showtimes && this.showtimes.length && this.showtimes[0].date) {
+          let shows = this.showtimes
+            .sort((a, b) => moment(a.date).isBefore(b.date));
+
+          if (!shows.length) return;
+
+          let start = shows[0],
+          end = shows[shows.length - 1];
+          // let start = shows[0].formats.abbr, end = shows[shows.length-1].formats.abbr;
+          let str = start.formats.abbr;
+
+          if (start.short !== end.short) {
+            str += '-';
+            if (start.month !== end.month) return str + end.abbr;
+            str += end.date;
+          }
+
+          return str;
+        }
+      }
     }
   },
   attributes: {
@@ -41,9 +85,6 @@ export default {
     link: {
       type: String
     },
-    video: {
-      type: String
-    },
     entertainers: [{
       type: ObjectId,
       ref: 'Entertainer'
@@ -54,7 +95,8 @@ export default {
       },
       sections: [{
         id: {
-          type: String,
+          type: ObjectId,
+          ref: 'Section',
           required: true
         },
         price: {
@@ -63,10 +105,10 @@ export default {
         }
       }]
     }],
-    showtimes: {
+    showtimes: [{
       type: ObjectId,
       ref: 'Showtime'
-    },
+    }],
     venue: {
       type: ObjectId,
       ref: 'Venue'
@@ -74,6 +116,6 @@ export default {
     media: [{
       type: ObjectId,
       ref: 'Medium'
-    }],
+    }]
   }
 };

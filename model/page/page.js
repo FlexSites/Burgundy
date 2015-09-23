@@ -20,6 +20,10 @@ export default {
     isPublished: {
       type: String
     },
+    isDynamic: {
+      type: Boolean,
+      default: false
+    },
     media: [{
       type: ObjectId,
       ref: 'Medium'
