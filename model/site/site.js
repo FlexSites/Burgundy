@@ -77,9 +77,10 @@ export default {
 
       let hosts = user.groups.items.map(group => group.name);
 
-      if (!~hosts.indexOf('Admin')) objectPath.set(query, 'filter.where.host', hosts);
+      if (!~hosts.indexOf('Admin')) objectPath.set(query, 'where.host.$in', hosts);
     },
-    beforeUpdate: (instance, { user }) => {
+
+    beforeUpdate: (instance) => {
       [
         'testimonials',
         'pages',
