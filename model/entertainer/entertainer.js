@@ -36,7 +36,7 @@ export default {
   lifecycle: {
     beforeAccess: (query, { user, flex: { site } }) => {
       if (!user) return;
-      if (site.type === 'entertainer') set(query, 'filter.where.website', site.host);
+      if (site.type === 'entertainer') set(query, 'where.website', site.host);
     }
   }
 };
