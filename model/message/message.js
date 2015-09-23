@@ -11,12 +11,12 @@ export default {
 
   },
   virtuals: {
-    ago: {
-      get: function() {
-        console.log(ago(this.createdAt().getTime(), 'ms'));
-        return ago(this.createdAt().getTime(), 'ms');
-      }
-    }
+    // ago: {
+    //   get: function() {
+    //     console.log(ago(this.createdAt().getTime(), 'ms'));
+    //     return ago(this.createdAt().getTime(), 'ms');
+    //   }
+    // }
     // toJSON: function() {
     //   this.ago = this.ago();
     //   return this;
