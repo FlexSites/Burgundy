@@ -33,40 +33,38 @@ export default {
       // urlish: true,
       required: true
     },
+    thumbnail: {
+      type: String,
+      urlish: true
+    },
     description: {
       type: String
     },
 
   },
   virtuals: {
-
-    // thumbnail: function() {
-    //   let id = getYoutubeId(this.src);
-    //   if (id) return `http://img.youtube.com/vi/${id}/0.jpg`;
-    //   return UPLOAD_HOST + variation('thumb', this.src);
-    // },
-
-    // embed: function() {
-    //   let id = getYoutubeId(this.src);
-    //   if (id) return `https://www.youtube.com/embed/${id}`;
-    //   return this.src;
-    // },
-
-    // toJSON: function() {
-    //   this.embed = this.embed();
-    //   this.thumbnail = this.thumbnail();
-    //   return this;
-    // }
+    embed: {
+      get: function() {
+        let id = getYoutubeId(this.src);
+        if (id) return `https://www.youtube.com/embed/${id}`;
+      }
+    }
   },
   lifecycle: {
     beforeCreate: (ins, req) => {
       if (!ins.filetype && ins.type !== 'video') ins.filetype = mime.lookup(ins.src);
+      if (ins.type === 'video') {
+        let id = getYoutubeId(ins.src);
+        if (id) ins.thumbnail = `http://img.youtube.com/vi/${id}/0.jpg`;
+      }
     },
+
     afterCreate: (ins, req) => {
+      if (ins.type === 'video') return ins;
       return assign(ins.src, ins.id, req.flex.site.host)
         .then(({ from, to }) => {
           ins.src = to;
-          transform(ins.type, ins.src)
+          transform(ins.type, ins.src);
           return ins;
         })
         .then(() => getModels('medium'))
