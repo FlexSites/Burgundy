@@ -1,4 +1,3 @@
-'use strict';
 
 import augmentDocs from '../middleware/augment-docs';
 import getModels from '../lib/db';

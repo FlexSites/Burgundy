@@ -1,4 +1,3 @@
-import path from 'path';
 import { init as stormpath } from 'express-stormpath';
 
 export default function(app) {
@@ -6,4 +5,3 @@ export default function(app) {
     expandGroups: true
   });
 }
-
