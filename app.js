@@ -1,4 +1,3 @@
-'use strict';
 
 import path from 'path';
 import express from 'express';
@@ -13,7 +12,7 @@ import swaggerize from 'swaggerize-express';
 import swaggerDocs from 'swaggerize-docs';
 
 // Initialization
-import {init as mongoose} from './lib/db';
+import { init as mongoose } from './lib/db';
 import stormpathInit from './init/stormpath';
 // import featureClient from './init/xprmntl';
 
@@ -77,7 +76,7 @@ Promise.all([
 
   app.use('/api/:version', mongoose({
     url: process.env.MONGOLAB_URI,
-    dir: path.join(__dirname, 'model')
+    dir: path.join(__dirname, 'models')
   }));
 
   // Page Render

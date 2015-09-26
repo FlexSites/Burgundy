@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
 import getModels from '../lib/db';
 
-export default function(app) {
+export default function() {
   var siteMap = { host: {}, _id: {} };
-  var isObjectId = /[a-f0-9]{24}/i
+  var isObjectId = /[a-f0-9]{24}/i;
 
   return function(req, res, next) {
 
@@ -36,7 +36,7 @@ export default function(app) {
     return getModels('site')
       .then(Site => Site.findOne(query)
         .then((site = {}) => {
-          if (site === null) site = {}
+          if (site === null) site = {};
           if (site._id) siteMap.host[site.host] = siteMap._id[site._id] = site;
           return site;
         })

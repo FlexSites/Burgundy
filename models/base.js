@@ -1,6 +1,3 @@
-'use strict';
-
-import flatten from 'flat';
 import { get } from 'object-path';
 
 export default {
@@ -9,9 +6,9 @@ export default {
   virtuals: {
     createdAt: {
       get: function() {
-        return new Date(parseInt((this.id || this._id).toString().slice(0, 8), 16) * 1000);
+        return new Date(parseInt(this._id.toString().slice(0, 8), 16) * 1000);
       }
-    },
+    }
   },
   attributes: {
     // toJSON: function() {
@@ -25,7 +22,6 @@ export default {
   lifecycle: {
 
     beforeSave: function(instance, req){
-      if (!instance) return;
 
       // Inject Site ID if it was null
       if (get(this, '_attributes.site') && !instance.site) {
@@ -38,7 +34,7 @@ export default {
     beforeValidate: (req, res, next) => {
       if (req.body.media) delete req.body.media;
       next();
-    },
+    }
   },
   acl: {
     create: 'siteOwner',
