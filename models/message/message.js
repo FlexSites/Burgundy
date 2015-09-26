@@ -1,5 +1,3 @@
-import ago from 'ago';
-
 export default {
   identity: 'message',
   base: 'site-owned',
@@ -7,8 +5,7 @@ export default {
     toEmail: { type: 'String', required: true },
     fromEmail: { type: 'String', required: true },
     type: { type: 'String', required: true },
-    body: { type: 'String', required: true },
-
+    body: { type: 'String', required: true }
   },
   virtuals: {
     // ago: {

@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import moment from 'moment';
 
 let ObjectId = Schema.Types.ObjectId;
@@ -39,10 +39,10 @@ export default {
           let shows = this.showtimes
             .sort((a, b) => moment(a.date).isBefore(b.date));
 
-          if (!shows.length) return;
+          if (!shows.length) return '';
 
-          let start = shows[0],
-          end = shows[shows.length - 1];
+          let start = shows[0]
+            , end = shows[shows.length - 1];
           // let start = shows[0].formats.abbr, end = shows[shows.length-1].formats.abbr;
           let str = start.formats.abbr;
 

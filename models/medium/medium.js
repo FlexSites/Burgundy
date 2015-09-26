@@ -1,7 +1,6 @@
-'use strict';
 
 import { getYoutubeId } from '../../lib/string-util';
-import { find, assign, remove, variation, UPLOAD_HOST } from '../../lib/aws/s3';
+import { find, assign, remove } from '../../lib/aws/s3';
 import transform from '../../lib/blitline';
 import getModels from '../../lib/db';
 import url from 'url';
@@ -39,8 +38,7 @@ export default {
     },
     description: {
       type: String
-    },
-
+    }
   },
   virtuals: {
     embed: {
@@ -51,18 +49,17 @@ export default {
     }
   },
   lifecycle: {
-    beforeCreate: (ins, req) => {
+    beforeCreate: (ins) => {
       if (!ins.filetype && ins.type !== 'video') ins.filetype = mime.lookup(ins.src);
       if (ins.type === 'video') {
         let id = getYoutubeId(ins.src);
         if (id) ins.thumbnail = `http://img.youtube.com/vi/${id}/0.jpg`;
       }
     },
-
     afterCreate: (ins, req) => {
       if (ins.type === 'video') return ins;
       return assign(ins.src, ins.id, req.flex.site.host)
-        .then(({ from, to }) => {
+        .then(({ to }) => {
           ins.src = to;
           transform(ins.type, ins.src);
           return ins;
@@ -71,7 +68,6 @@ export default {
         .then(Media => Media.update({ id: ins.id }, ins))
         .then(() => ins);
     },
-
     afterDelete: (ins) => {
       let { host, pathname } = url.parse(ins.src, false, true);
       if (host !== 'uploads.flexsites.io') return ins;
