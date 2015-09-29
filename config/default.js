@@ -2,6 +2,7 @@ import { deferConfig as defer } from 'config/defer';
 import url from 'url';
 
 export default {
+  env: 'local',
   aws: {
     region: 'us-west-2',
     s3: {
@@ -20,6 +21,7 @@ export default {
     password: defer(function(cfg) {
       if (cfg.redis.url) return url.parse(cfg.redis.url).auth.split(':')[1];
     })
-  }
+  },
+  devEmail: 'sethtippetts@gmail.com'
 };
 

@@ -37,7 +37,7 @@ export default function() {
       .then(Site => Site.findOne(query)
         .then((site = {}) => {
           if (site === null) site = {};
-          if (site._id) siteMap.host[site.host] = siteMap._id[site._id] = site;
+          if (site._id) siteMap.host[site.host] = siteMap._id[site._id] = site.toObject();
           return site;
         })
       );

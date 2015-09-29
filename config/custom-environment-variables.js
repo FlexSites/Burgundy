@@ -1,6 +1,7 @@
 
 
 export default {
+  env: 'NODE_ENV',
   aws: {
     region: 'AWS_REGION',
     s3: {
@@ -9,5 +10,6 @@ export default {
   },
   redis: {
     url: 'REDIS_URL'
-  }
+  },
+  devEmail: 'DEV_EMAIL'
 };
