@@ -5,7 +5,8 @@ export default {
     toEmail: { type: 'String', required: true },
     fromEmail: { type: 'String', required: true },
     type: { type: 'String', required: true },
-    body: { type: 'String', required: true }
+    body: { type: 'String', required: true },
+    subject: { type: 'string' }
   },
   virtuals: {
     // ago: {
