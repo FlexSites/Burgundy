@@ -3,6 +3,7 @@ import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import debug from 'debug';
 import { json } from 'body-parser';
 import stormpath from 'express-stormpath';
 import Promise from 'bluebird';
@@ -29,8 +30,13 @@ const DOCS_DIR = path.join(__dirname, 'docs');
 const ROUTES_DIR = path.join(__dirname, 'routes');
 const SWAGGER_URI = '/api-docs';
 const PORT = config.get('port');
+const ENV = config.get('env');
 
 global.__root = __dirname;
+
+var log = debug('flexsites:boot');
+log.log = console.log.bind(console);
+var err = debug('flexsites:boot:error');
 
 var app = express();
 
@@ -94,12 +100,13 @@ Promise.all([
   app.listen(PORT, function() {
     let sites = 'all FlexSites';
     if (process.env.OVERRIDE_HOST) sites = `site: "${process.env.OVERRIDE_HOST}"`;
-    console.log(`Listening on port ${PORT}`);
-    console.log(`Serving ${sites}`);
+    log(`Environment: ${ENV}`);
+    log(`Listening on port ${PORT}`);
+    log(`Serving ${sites}`);
   });
 })
 .catch(ex => {
-  console.error('Startup failed', ex.message, ex.status, ex.stack);
+  err('Startup failed', ex.message, ex.status, ex.stack);
   process.exit(1);
 });
 

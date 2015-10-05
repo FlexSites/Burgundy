@@ -9,7 +9,7 @@ function getHostname() {
 
   var choices = glob.sync(path.resolve(__dirname, '../sites/*'))
     .filter(dir => dir.charAt(0) !== '.')
-    .map(basename);
+    .map(dir => basename(dir));
 
   choices.unshift({
     name: 'All (requires /etc/hosts and proxy)',
