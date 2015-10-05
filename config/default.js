@@ -3,6 +3,7 @@ import url from 'url';
 
 export default {
   env: 'local',
+  port: '3000',
   aws: {
     region: 'us-west-2',
     s3: {

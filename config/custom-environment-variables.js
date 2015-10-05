@@ -2,6 +2,7 @@
 
 export default {
   env: 'NODE_ENV',
+  port: 'PORT',
   aws: {
     region: 'AWS_REGION',
     s3: {

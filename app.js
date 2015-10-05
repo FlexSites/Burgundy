@@ -1,4 +1,4 @@
-
+import config from 'config';
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -22,11 +22,13 @@ import pageRender from './middleware/page-render';
 
 // FlexSites custom
 import wwwRedirect from './middleware/www-redirect';
+import hostInjector from './middleware/host-injector';
 import siteInjector from './middleware/site-injector';
 
 const DOCS_DIR = path.join(__dirname, 'docs');
 const ROUTES_DIR = path.join(__dirname, 'routes');
 const SWAGGER_URI = '/api-docs';
+const PORT = config.get('port');
 
 global.__root = __dirname;
 
@@ -39,6 +41,7 @@ app.use(wwwRedirect());
 
 app.use(cookieParser());
 app.use(json({ extended: true }));
+app.use(hostInjector(app));
 
 // Static Proxy
 app.use(staticProxy(['/xprmntl/xpr-toggle.js']));
@@ -88,8 +91,11 @@ Promise.all([
     res.status(err.status || 500).send(err.message || 'Server error.');
   });
 
-  app.listen(process.env.PORT || 3000, function() {
-    console.log('Startup complete', process.env.PORT || 3000);
+  app.listen(PORT, function() {
+    let sites = 'all FlexSites';
+    if (process.env.OVERRIDE_HOST) sites = `site: "${process.env.OVERRIDE_HOST}"`;
+    console.log(`Listening on port ${PORT}`);
+    console.log(`Serving ${sites}`);
   });
 })
 .catch(ex => {
