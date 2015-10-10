@@ -11,12 +11,13 @@ export default {
     site: {
       type: ObjectId,
       ref: 'Site',
-      required: true
-    }
+      required: true,
+    },
   },
   lifecycle: {
     beforeAccess: (query, { flex }) => {
       let { site } = flex;
+
       // If there's a siteId in the request, only show related models
       objectPath.set(query, 'where.site', site.id || site._id);
     },
@@ -29,7 +30,7 @@ export default {
           instance.site = site.id;
         }
       }
-    }
+    },
 
-  }
+  },
 };

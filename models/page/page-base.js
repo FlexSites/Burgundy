@@ -4,16 +4,15 @@ export default {
   attributes: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     format: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
-

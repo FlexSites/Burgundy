@@ -4,11 +4,11 @@ export default {
   aws: {
     region: 'AWS_REGION',
     s3: {
-      bucket: 'S3_BUCKET'
-    }
+      bucket: 'S3_BUCKET',
+    },
   },
   redis: {
-    url: 'REDIS_URL'
+    url: 'REDIS_URL',
   },
-  devEmail: 'DEV_EMAIL'
+  devEmail: 'DEV_EMAIL',
 };

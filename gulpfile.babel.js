@@ -13,7 +13,7 @@ function getHostname() {
 
   choices.unshift({
     name: 'All (requires /etc/hosts and proxy)',
-    value: 'ALL'
+    value: 'ALL',
   });
 
   return Promise.fromNode(cb => {
@@ -22,8 +22,8 @@ function getHostname() {
         type: 'list',
         name: 'site',
         message: 'Enter hostname',
-        choices
-      }
+        choices,
+      },
     ], results => cb(null, results));
   });
 }
@@ -34,22 +34,22 @@ function startServer(site) {
     script: 'index.js',
     ext: 'js',
     env: {
-      OVERRIDE_HOST: site
-    }
+      OVERRIDE_HOST: site,
+    },
   });
 
-  nodemon.on('start', function() {
+  nodemon.on('start', () => {
     console.log('App has started');
   })
-  .on('quit', function() {
+  .on('quit', () => {
     console.log('App has quit');
   })
-  .on('restart', function(files) {
+  .on('restart', (files) => {
     console.log('App restarted due to: ', files);
   });
 }
 
-gulp.task('site', function(done) {
+gulp.task('site', (done) => {
   getHostname()
     .then(({ site }) => {
       startServer(site);

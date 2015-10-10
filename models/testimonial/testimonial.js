@@ -6,5 +6,5 @@ export default {
     quote: { type: String, required: true },
     author: { type: String, required: true },
     company: { type: String, required: true },
-  }
+  },
 };

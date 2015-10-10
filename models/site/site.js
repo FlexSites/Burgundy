@@ -10,66 +10,66 @@ export default {
   attributes: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
       type: String,
-      required: true
+      required: true,
     },
     repo: {
       type: String,
-      required: true
+      required: true,
     },
     host: {
       type: String,
-      required: true
+      required: true,
     },
     analytics: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
-      type: String
+      type: String,
     },
     isSinglePageApp: {
       type: Boolean,
-      defaultsTo: false
+      defaultsTo: false,
     },
     styles: {
-      type: [String]
+      type: [String],
     },
     scripts: {
-      type: [String]
+      type: [String],
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     keywords: {
       type: String,
-      required: true
+      required: true,
     },
     redirects: {
-      type: [String]
+      type: [String],
     },
     contact_email: {
-      type: String
+      type: String,
     },
     contact_phone: {
-      type: String
+      type: String,
     },
     testimonials: {
       ref: 'Testimonial',
-      type: ObjectId
+      type: ObjectId,
     },
     pages: {
       ref: 'Page',
-      type: ObjectId
+      type: ObjectId,
     },
     events: {
       ref: 'Event',
-      type: ObjectId
-    }
+      type: ObjectId,
+    },
   },
   lifecycle: {
     beforeAccess: (query, { user }) => {
@@ -90,6 +90,6 @@ export default {
       });
 
       return instance;
-    }
-  }
+    },
+  },
 };

@@ -6,9 +6,10 @@ export default {
     fromEmail: { type: 'String', required: true },
     type: { type: 'String', required: true },
     body: { type: 'String', required: true },
-    subject: { type: 'string' }
+    subject: { type: 'string' },
   },
   virtuals: {
+
     // ago: {
     //   get: function() {
     //     console.log(ago(this.createdAt().getTime(), 'ms'));
@@ -27,21 +28,21 @@ export default {
       accessType: 'WRITE',
       principalType: 'ROLE',
       principalId: '$everyone',
-      permission: 'ALLOW'
+      permission: 'ALLOW',
     },
     {
       model: 'message',
       accessType: 'READ',
       principalType: 'ROLE',
       principalId: '$everyone',
-      permission: 'DENY'
+      permission: 'DENY',
     },
     {
       accessType: 'READ',
       principalType: 'ROLE',
       principalId: 'siteOwner',
-      permission: 'ALLOW'
-    }
+      permission: 'ALLOW',
+    },
   ],
-  methods: []
+  methods: [],
 };

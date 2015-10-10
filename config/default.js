@@ -9,8 +9,8 @@ export default {
     s3: {
       region: defer(cfg => {
         return cfg.aws.region;
-      })
-    }
+      }),
+    },
   },
   isProd: defer(cfg => {
     return cfg.env === 'production';
@@ -33,8 +33,7 @@ export default {
     }),
     password: defer(cfg => {
       if (cfg.redis.url) return url.parse(cfg.redis.url).auth.split(':')[1];
-    })
+    }),
   },
-  devEmail: 'sethtippetts@gmail.com'
+  devEmail: 'sethtippetts@gmail.com',
 };
-

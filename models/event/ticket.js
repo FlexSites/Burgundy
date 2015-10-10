@@ -9,21 +9,21 @@ export default {
   attributes: {
     status: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
-      type: String
+      type: String,
     },
     price: {
-      type: Number
+      type: Number,
     },
     seat: {
       ref: 'Seat',
-      type: ObjectId
+      type: ObjectId,
     },
     showtime: {
       type: ObjectId,
-      ref: 'Showtime'
-    }
-  }
+      ref: 'Showtime',
+    },
+  },
 };

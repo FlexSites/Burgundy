@@ -30,7 +30,7 @@
     /**
      * ECMA 6
      */
-    "arrow-parens": 2,
+    "arrow-parens": 0,
     "arrow-spacing": 2,
     "constructor-super": 2,
     "generator-star-spacing": [ 2, "after" ],
@@ -157,8 +157,8 @@
     "no-trailing-spaces": 2,
     "no-unneeded-ternary": 2,
     "operator-linebreak": [ 2, "after" ],
-    // "quote-props": [ 2, "as-needed" ],
-    "quote-props": [ 2, "consistent-as-needed" ],
+    "quote-props": [ 2, "as-needed" ],
+    // "quote-props": [ 2, "consistent-as-needed" ],
     "quotes": [ 2, "single" ],
     "semi": [ 0, "never" ],
     "semi-spacing": 2,
@@ -194,7 +194,7 @@
     /**
      * Node / CommonJS
      */
-    "global-require": 2,
+    "global-require": 1,
     "handle-callback-err": 2,
     "no-mixed-requires": [ 1, true ],
     "no-path-concat": 2,

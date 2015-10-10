@@ -16,7 +16,7 @@ export function getModelDefinitions(name, properties, obj) {
         objectPath.set(nestedObj, prop.replace(/_/, '.'), val);
         let nestedObjName = prop.split('_').shift();
         properties[nestedObjName] = {
-          $ref: `#/definitions/${capitalize(name)}_${capitalize(nestedObjName)}`
+          $ref: `#/definitions/${capitalize(name)}_${capitalize(nestedObjName)}`,
         };
         delete properties[prop];
       }
@@ -40,7 +40,7 @@ export function getModelDefinitions(name, properties, obj) {
       return prev;
     }, {});
 
-   obj[name] = { properties };
+  obj[name] = { properties };
 }
 
 export default function augmentDocs(api, models) {
@@ -61,6 +61,7 @@ export default function augmentDocs(api, models) {
 
           if (/\{id\}/.test(path)) {
             if (!methodObj.parameters) methodObj.parameters = [];
+
             // methodObj.parameters = [
             //   {
             //     'in': 'path',

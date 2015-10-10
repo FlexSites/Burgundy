@@ -19,12 +19,13 @@ export default function(ignores = []) {
   function staticMiddleware() {
 
     let { bucket, region } = config.get('aws.s3');
+
     // If there's no bucket, stop short and serve local files
     if (!bucket) return express.static(path.join(global.__root, '../sites'));
 
     let proxy = httpProxy.createProxyServer({
       changeOrigin: true,
-      target: `http://${bucket}.s3-website-${region}.amazonaws.com`
+      target: `http://${bucket}.s3-website-${region}.amazonaws.com`,
     });
 
     return (req, res, next) => {

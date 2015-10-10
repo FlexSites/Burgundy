@@ -15,7 +15,6 @@ import swaggerDocs from 'swaggerize-docs';
 // Initialization
 import { init as mongoose } from './lib/db';
 import stormpathInit from './init/stormpath';
-// import featureClient from './init/xprmntl';
 
 // Router
 import staticProxy from './middleware/static-proxy';
@@ -60,7 +59,6 @@ app.use(siteInjector(app));
 
 Promise.all([
   swaggerDocs(DOCS_DIR),
-  // featureClient.announce()
 ])
 .then(([api]) => {
 
@@ -80,12 +78,12 @@ Promise.all([
   app.use(swaggerize({
     api,
     docspath: SWAGGER_URI,
-    handlers: ROUTES_DIR
+    handlers: ROUTES_DIR,
   }));
 
   app.use('/api/:version', mongoose({
     url: process.env.MONGOLAB_URI,
-    dir: path.join(__dirname, 'models')
+    dir: path.join(__dirname, 'models'),
   }));
 
   // Page Render
@@ -97,7 +95,7 @@ Promise.all([
     res.status(err.status || 500).send(err.message || 'Server error.');
   });
 
-  app.listen(PORT, function() {
+  app.listen(PORT, () => {
     let sites = 'all FlexSites';
     if (process.env.OVERRIDE_HOST) sites = `site: "${process.env.OVERRIDE_HOST}"`;
     log(`Environment: ${ENV}`);
@@ -107,7 +105,5 @@ Promise.all([
 })
 .catch(ex => {
   err('Startup failed', ex.message, ex.status, ex.stack);
-  process.exit(1);
+  throw new Error(ex);
 });
-
-

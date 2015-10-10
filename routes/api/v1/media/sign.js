@@ -23,5 +23,5 @@ export default {
         .then(data => res.send({ signed_request: data }))
       )
       .catch(next);
-  }
+  },
 };

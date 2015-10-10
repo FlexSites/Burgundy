@@ -9,25 +9,25 @@ export default {
   attributes: {
     type: {
       type: String,
-      default: 'GA'
+      default: 'GA',
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     color: {
-      type: String
+      type: String,
     },
     seatCount: {
-      type: Number
+      type: Number,
     },
     venue: {
       ref: 'Venue',
-      type: ObjectId
+      type: ObjectId,
     },
     seat: {
       ref: 'Seat',
-      type: ObjectId
-    }
-  }
+      type: ObjectId,
+    },
+  },
 };

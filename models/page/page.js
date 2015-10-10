@@ -9,25 +9,24 @@ export default {
   attributes: {
     url: {
       type: String,
-      required: true
+      required: true,
     },
     templateUrl: {
-      type: String
+      type: String,
     },
     content: {
-      type: String
+      type: String,
     },
     isPublished: {
-      type: String
+      type: String,
     },
     isDynamic: {
       type: Boolean,
-      default: false
+      default: false,
     },
     media: [{
       type: ObjectId,
-      ref: 'Medium'
-    }]
-  }
+      ref: 'Medium',
+    }],
+  },
 };
-

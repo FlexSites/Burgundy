@@ -9,5 +9,5 @@ export default {
     if (api) return res.send(api);
     getModels()
       .then(models => res.send(api = augmentDocs(api, models)));
-  }
+  },
 }

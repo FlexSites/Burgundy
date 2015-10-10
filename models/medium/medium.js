@@ -15,38 +15,39 @@ export default {
     type: {
       type: String,
       in: ['hero', 'profile', 'background', 'ad', 'video', 'other'],
-      required: true
+      required: true,
     },
     subtype: {
-      type: String
+      type: String,
     },
     filetype: {
-      type: String
+      type: String,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     src: {
       type: String,
+
       // urlish: true,
-      required: true
+      required: true,
     },
     thumbnail: {
       type: String,
-      urlish: true
+      urlish: true,
     },
     description: {
-      type: String
-    }
+      type: String,
+    },
   },
   virtuals: {
     embed: {
-      get: function() {
+      get() {
         let id = getYoutubeId(this.src);
         if (id) return `https://www.youtube.com/embed/${id}`;
-      }
-    }
+      },
+    },
   },
   lifecycle: {
     beforeCreate: (ins) => {
@@ -73,8 +74,8 @@ export default {
       if (host !== 'uploads.flexsites.io') return ins;
       return find(path.dirname(pathname).substr(1))
         .then(remove);
-    }
-  }
+    },
+  },
 };
 
 

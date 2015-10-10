@@ -14,22 +14,22 @@ export default {
       suite: { type: String },
       city: { type: String, required: true },
       state: { type: String, required: true },
-      zip: { type: Number, required: true }
+      zip: { type: Number, required: true },
     },
     phone: { type: Number },
     email: { type: String, required: true },
     geo: {
-      type: Number
+      type: Number,
     },
     brand: { type: String },
     description: { type: String },
     sections: [{
       ref: 'Section',
-      type: ObjectId
+      type: ObjectId,
     }],
     media: [{
       ref: 'Medium',
-      type: ObjectId
-    }]
-  }
+      type: ObjectId,
+    }],
+  },
 };
