@@ -18,7 +18,7 @@ export default {
       ins.toEmail = site.contact.email;
       ins.subject = 'New Message from ' + ins.name;
       ins.type = 'contact';
-      ins.fromEmail = ins.email;
+      ins.fromEmail = ins.email || ins.fromEmail;
     },
 
     afterCreate: (ins, { flex: { site } }) => {
