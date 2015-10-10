@@ -6,7 +6,7 @@ export default {
     if (req.user) {
 
       // Add the isAdmin flag
-      req.user.isAdmin = !!req.user.groups.items.find(function(item) {
+      req.user.isAdmin = !!req.user.groups.items.find(item => {
         return item.name === 'Admin';
       });
 
@@ -14,5 +14,5 @@ export default {
     }
 
     next(new NotFound('Session not found'));
-  }
+  },
 }

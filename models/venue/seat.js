@@ -9,15 +9,15 @@ export default {
   attributes: {
     row: {
       type: String,
-      required: true
+      required: true,
     },
     number: {
       type: String,
-      required: true
+      required: true,
     },
     section: {
       type: ObjectId,
-      ref: 'Section'
-    }
-  }
+      ref: 'Section',
+    },
+  },
 };

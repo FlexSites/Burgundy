@@ -1,4 +1,5 @@
 import Promise from 'bluebird';
+import { set } from 'object-path';
 import getModels from '../lib/db';
 
 export default function() {
@@ -7,19 +8,17 @@ export default function() {
 
   return function(req, res, next) {
 
-    var value = req.get('X-FlexSite') || req.hostname
+    var value = req.get('X-FlexSite') || req.flex.host
       , type = 'host';
 
     if (isObjectId.test(value)) {
       type = '_id';
-    } else {
-      value = /^(?:https?:\/\/)?(?:www|local|test)?\.?(.*)$/.exec(value)[1];
     }
 
     getSite(type, value)
       .then((site) => {
         if (!site) throw new Error('Invalid site identifier!');
-        req.flex = { site };
+        set(req, 'flex.site', site);
       })
       .then(next)
       .catch(next);
@@ -27,8 +26,8 @@ export default function() {
 
   function getSite(type, value) {
 
-    let site = siteMap[type][value];
-    if (site) return Promise.resolve(site);
+    let cachedSite = siteMap[type][value];
+    if (cachedSite) return Promise.resolve(cachedSite);
 
     let query = {};
     query[type] = value;

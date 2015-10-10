@@ -10,7 +10,7 @@ featureClient.use(xprToggle());
 featureClient.configure({
   featureUrl: 'https://flexprmntl.herokuapp.com',
   devKey: '1f4d2450-1592-4ea1-8442-4ea5d7dde5f7',
-  experiments: ['testExp1', 'testExp2']
+  experiments: ['testExp1', 'testExp2'],
 });
 
 featureClient.cron('* * * * * *');

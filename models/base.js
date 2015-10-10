@@ -5,13 +5,14 @@ export default {
   public: false,
   virtuals: {
     createdAt: {
-      get: function() {
+      get() {
         return new Date(parseInt(this._id.toString().slice(0, 8), 16) * 1000);
-      }
-    }
+      },
+    },
   },
   attributes: {
-    // toJSON: function() {
+
+    // toJSON() {
     //   if (typeof this.createdAt === 'function') {
     //     this.createdAt = this.createdAt();
     //   }
@@ -21,7 +22,7 @@ export default {
   },
   lifecycle: {
 
-    beforeSave: function(instance, req){
+    beforeSave(instance, req){
 
       // Inject Site ID if it was null
       if (get(this, '_attributes.site') && !instance.site) {
@@ -34,12 +35,12 @@ export default {
     beforeValidate: (req, res, next) => {
       if (req.body.media) delete req.body.media;
       next();
-    }
+    },
   },
   acl: {
     create: 'siteOwner',
     read: '$everyone',
     update: 'siteOwner',
-    delete: 'siteOwner'
-  }
+    delete: 'siteOwner',
+  },
 };

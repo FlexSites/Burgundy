@@ -5,9 +5,9 @@ import lambdas from '../lib/lambdas';
 
 var flexDataPattern = /<!--\[flex\]>(.*?)<!\[flex\]-->/i
   , options = {
-  delimiters: '[[ ]]',
-  disableLambda: false
-};
+    delimiters: '[[ ]]',
+    disableLambda: false,
+  };
 
 export default function(app) {
   let util = apiUtil(app);
@@ -15,7 +15,7 @@ export default function(app) {
     let promises = [
       util.getPage(req),
       util.getTemplate(req),
-      util.getRouteData(req, res)
+      util.getRouteData(req, res),
     ];
 
     Promise.all(promises)
@@ -33,7 +33,7 @@ export default function(app) {
       .then(([ page, layout, data ]) => {
         var include = includeTemplate.bind(this, page);
 
-        Object.keys(lambdas).map(function(key) {
+        Object.keys(lambdas).map(key => {
           if (!data[key]) data[key] = lambdas[key];
         });
         data.page = page;

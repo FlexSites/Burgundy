@@ -6,7 +6,7 @@ export default {
   public: true,
   virtuals: {
     formats: {
-      get: function() {
+      get() {
         let m = moment(this.date);
         return {
           month: m.format('MMM'),
@@ -14,23 +14,23 @@ export default {
           time: m.format('H:mm'),
           short: m.format('M/D/YY'),
           abbr: m.format('MMM. D'),
-          med: m.format('dddd MMMM D')
+          med: m.format('dddd MMMM D'),
         };
-      }
-    }
+      },
+    },
   },
   attributes: {
     datetime: {
       type: Date,
-      required: true
+      required: true,
     },
     tickets: [{
       ref: 'Ticket',
-      type: String
+      type: String,
     }],
     event: {
       ref: 'Event',
       type: String,
-    }
-  }
+    },
+  },
 };

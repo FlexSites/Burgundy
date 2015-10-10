@@ -4,21 +4,20 @@ export default {
   public: true,
   attributes: {
     publishedDate: {
-      type: Date
+      type: Date,
     },
     content: {
       type: String,
-      required: true
+      required: true,
     },
     tags: {
-      type: [String]
+      type: [String],
     },
     previewImage: {
-      type: String
+      type: String,
     },
     media: {
-      type: [String]
-    }
-  }
+      type: [String],
+    },
+  },
 };
-

@@ -1,5 +1,5 @@
 require('dotenv').load({
-  silent: true
+  silent: true,
 });
 require('babel/register');
 require('./app');

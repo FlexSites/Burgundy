@@ -1,8 +1,9 @@
-
+import config from 'config';
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import debug from 'debug';
 import { json } from 'body-parser';
 import stormpath from 'express-stormpath';
 import Promise from 'bluebird';
@@ -14,7 +15,6 @@ import swaggerDocs from 'swaggerize-docs';
 // Initialization
 import { init as mongoose } from './lib/db';
 import stormpathInit from './init/stormpath';
-// import featureClient from './init/xprmntl';
 
 // Router
 import staticProxy from './middleware/static-proxy';
@@ -22,13 +22,20 @@ import pageRender from './middleware/page-render';
 
 // FlexSites custom
 import wwwRedirect from './middleware/www-redirect';
+import hostInjector from './middleware/host-injector';
 import siteInjector from './middleware/site-injector';
 
 const DOCS_DIR = path.join(__dirname, 'docs');
 const ROUTES_DIR = path.join(__dirname, 'routes');
 const SWAGGER_URI = '/api-docs';
+const PORT = config.get('port');
+const ENV = config.get('env');
 
 global.__root = __dirname;
+
+var log = debug('flexsites:boot');
+log.log = console.log.bind(console);
+var err = debug('flexsites:boot:error');
 
 var app = express();
 
@@ -39,6 +46,7 @@ app.use(wwwRedirect());
 
 app.use(cookieParser());
 app.use(json({ extended: true }));
+app.use(hostInjector(app));
 
 // Static Proxy
 app.use(staticProxy(['/xprmntl/xpr-toggle.js']));
@@ -51,7 +59,6 @@ app.use(siteInjector(app));
 
 Promise.all([
   swaggerDocs(DOCS_DIR),
-  // featureClient.announce()
 ])
 .then(([api]) => {
 
@@ -71,12 +78,12 @@ Promise.all([
   app.use(swaggerize({
     api,
     docspath: SWAGGER_URI,
-    handlers: ROUTES_DIR
+    handlers: ROUTES_DIR,
   }));
 
   app.use('/api/:version', mongoose({
     url: process.env.MONGOLAB_URI,
-    dir: path.join(__dirname, 'models')
+    dir: path.join(__dirname, 'models'),
   }));
 
   // Page Render
@@ -88,13 +95,15 @@ Promise.all([
     res.status(err.status || 500).send(err.message || 'Server error.');
   });
 
-  app.listen(process.env.PORT || 3000, function() {
-    console.log('Startup complete', process.env.PORT || 3000);
+  app.listen(PORT, () => {
+    let sites = 'all FlexSites';
+    if (process.env.OVERRIDE_HOST) sites = `site: "${process.env.OVERRIDE_HOST}"`;
+    log(`Environment: ${ENV}`);
+    log(`Listening on port ${PORT}`);
+    log(`Serving ${sites}`);
   });
 })
 .catch(ex => {
-  console.error('Startup failed', ex.message, ex.status, ex.stack);
-  process.exit(1);
+  err('Startup failed', ex.message, ex.status, ex.stack);
+  throw new Error(ex);
 });
-
-

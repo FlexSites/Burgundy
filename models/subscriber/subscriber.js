@@ -4,40 +4,40 @@ export default {
   public: true,
   attributes: {
     name: {
-      type: String
+      type: String,
     },
     email: {
       type: String,
-      required: true
+      required: true,
     },
     zip: {
-      type: String
+      type: String,
     },
     status: {
       type: String,
-      default: 'S'
-    }
+      default: 'S',
+    },
   },
   acls: [
     {
       accessType: 'READ',
       principalType: 'ROLE',
       principalId: '$everyone',
-      permission: 'DENY'
+      permission: 'DENY',
     },
     {
       accessType: 'READ',
       principalType: 'ROLE',
       principalId: 'siteOwner',
-      permission: 'ALLOW'
+      permission: 'ALLOW',
     },
     {
       accessType: 'READ',
       principalType: 'ROLE',
       principalId: 'admin',
-      permission: 'ALLOW'
-    }
-  ]
+      permission: 'ALLOW',
+    },
+  ],
 };
 
 

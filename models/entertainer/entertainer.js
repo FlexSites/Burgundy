@@ -7,36 +7,36 @@ export default {
   attributes: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     credits: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     facebook: {
-      type: String
+      type: String,
     },
     website: {
-      type: String
+      type: String,
     },
     media: {
-      type: [String]
+      type: [String],
     },
     siteId: {
-      type: String
+      type: String,
     },
     events: {
-      type: [String]
+      type: [String],
     },
   },
   lifecycle: {
     beforeAccess: (query, { user, flex: { site } }) => {
       if (!user) return;
       if (site.type === 'entertainer') set(query, 'where.website', site.host);
-    }
-  }
+    },
+  },
 };

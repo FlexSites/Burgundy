@@ -9,15 +9,15 @@ export default {
   public: true,
   virtuals: {
     video: {
-      get: function() {
+      get() {
         if (this.media) {
           let video = this.media.find(element => element.type === 'video');
           if (video) return video.src;
         }
-      }
+      },
     },
     priceRange: {
-      get: function() {
+      get() {
         let prices = this.pricingTiers.reduce((prev, curr) => {
           return prev.concat(curr.sections.map(section => section.price));
         }, []);
@@ -27,14 +27,14 @@ export default {
           .sort();
         let low = prices[0];
         let high = prices[prices.length - 1];
-        let str = '$' + low;
+        let str = `$${low}`;
         if (!low) str = 'Free';
-        if (low !== high) str += ' - $' + high;
+        if (low !== high) str += ` - $${high}`;
         return str;
-      }
+      },
     },
     dateRange: {
-      get: function() {
+      get() {
         if (this.showtimes && this.showtimes.length && this.showtimes[0].date) {
           let shows = this.showtimes
             .sort((a, b) => moment(a.date).isBefore(b.date));
@@ -43,6 +43,7 @@ export default {
 
           let start = shows[0]
             , end = shows[shows.length - 1];
+
           // let start = shows[0].formats.abbr, end = shows[shows.length-1].formats.abbr;
           let str = start.formats.abbr;
 
@@ -54,68 +55,68 @@ export default {
 
           return str;
         }
-      }
-    }
+      },
+    },
   },
   attributes: {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
       type: String,
-      default: 'general'
+      default: 'general',
     },
     enabled: {
-      type: Date
+      type: Date,
     },
     dayofshow: {
       type: Number,
-      default: 0
+      default: 0,
     },
     doorTime: {
-      type: Date
+      type: Date,
     },
     description: {
-      type: String
+      type: String,
     },
     facebook: {
-      type: String
+      type: String,
     },
     link: {
-      type: String
+      type: String,
     },
     entertainers: [{
       type: ObjectId,
-      ref: 'Entertainer'
+      ref: 'Entertainer',
     }],
     pricingTiers: [{
       filter: {
-        type: String
+        type: String,
       },
       sections: [{
         id: {
           type: ObjectId,
           ref: 'Section',
-          required: true
+          required: true,
         },
         price: {
           type: Number,
-          required: true
-        }
-      }]
+          required: true,
+        },
+      }],
     }],
     showtimes: [{
       type: ObjectId,
-      ref: 'Showtime'
+      ref: 'Showtime',
     }],
     venue: {
       type: ObjectId,
-      ref: 'Venue'
+      ref: 'Venue',
     },
     media: [{
       type: ObjectId,
-      ref: 'Medium'
-    }]
-  }
+      ref: 'Medium',
+    }],
+  },
 };

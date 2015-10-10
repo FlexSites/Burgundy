@@ -3,10 +3,9 @@
  */
 module.exports = function(){
   var isNotApex = /^.*\..*\..*$/;
-  return function(req,res,next){
-    if (!isNotApex.test(req.get('Host'))) {
-      return res.redirect(301, req.protocol + '://www.' + req.hostname + req.url);
-    }
-    next();
+  return function(req, res, next){
+    let host = req.hostname;
+    if (host === 'localhost' || isNotApex.test(host)) return next();
+    res.redirect(301, `${req.protocol}://www.${host}${req.url}`);
   };
 };
