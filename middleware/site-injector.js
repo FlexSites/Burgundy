@@ -26,8 +26,8 @@ export default function() {
 
   function getSite(type, value) {
 
-    let site = siteMap[type][value];
-    if (site) return Promise.resolve(site);
+    let cachedSite = siteMap[type][value];
+    if (cachedSite) return Promise.resolve(cachedSite);
 
     let query = {};
     query[type] = value;

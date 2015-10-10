@@ -6,7 +6,7 @@ import { signUpload } from '../../../../lib/aws/s3';
 
 let random = Promise.promisify(crypto.randomBytes.bind(crypto, 16));
 
-let getFilename = Promise.method(({ query: { name, mediumId }, flex: { site: { host } } }) => {
+let getFilename = Promise.method(({ query: { mediumId }, flex: { site: { host } } }) => {
   if (mediumId) return `${host}/${mediumId}/original`;
   return random()
       .then(buf => `tmp/${buf.toString('hex')}`);

@@ -34,8 +34,8 @@ export function getModelDefinitions(name, properties, obj) {
     .map(key => {
       return { key, value: properties[key] };
     })
-    .filter(({ key, value }) => !!~Object.keys(value).indexOf('type') && Object.keys(value).length === 1)
-    .reduce((prev, {key, value}) => {
+    .filter(({ value }) => !!~Object.keys(value).indexOf('type') && Object.keys(value).length === 1)
+    .reduce((prev, { key }) => {
       prev[key] = { type: 'string' };
       return prev;
     }, {});
@@ -53,23 +53,27 @@ export default function augmentDocs(api, models) {
     });
 
   for (var path in api.paths) {
-    let pathObj = api.paths[path];
-    for (var method in pathObj) {
-      let methodObj = pathObj[method];
+    if (api.paths.hasOwnProperty(path)) {
+      let pathObj = api.paths[path];
+      for (var method in pathObj) {
+        if (pathObj.hasOwnProperty(method)) {
+          let methodObj = pathObj[method];
 
-      if (/\{id\}/.test(path)) {
-        if (!methodObj.parameters) methodObj.parameters = [];
-        // methodObj.parameters = [
-        //   {
-        //     'in': 'path',
-        //     name: 'id',
-        //     type: 'string',
-        //     required: true
-        //   }
-        // ].concat(methodObj.parameters);
-      } else if (method === 'get') {
-        if (!methodObj.parameters) methodObj.parameters = [];
-        methodObj.parameters = methodObj.parameters.concat(filterParameters);
+          if (/\{id\}/.test(path)) {
+            if (!methodObj.parameters) methodObj.parameters = [];
+            // methodObj.parameters = [
+            //   {
+            //     'in': 'path',
+            //     name: 'id',
+            //     type: 'string',
+            //     required: true
+            //   }
+            // ].concat(methodObj.parameters);
+          } else if (method === 'get') {
+            if (!methodObj.parameters) methodObj.parameters = [];
+            methodObj.parameters = methodObj.parameters.concat(filterParameters);
+          }
+        }
       }
     }
   }
@@ -77,4 +81,3 @@ export default function augmentDocs(api, models) {
   // TODO: only add swagger docs for "public" models
   return api;
 }
-

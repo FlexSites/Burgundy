@@ -20,7 +20,7 @@ export default function(ignores = []) {
 
     let { bucket, region } = config.get('aws.s3');
     // If there's no bucket, stop short and serve local files
-    if (!bucket) return express.static(path.join(__root, '../sites'));
+    if (!bucket) return express.static(path.join(global.__root, '../sites'));
 
     let proxy = httpProxy.createProxyServer({
       changeOrigin: true,
@@ -33,4 +33,3 @@ export default function(ignores = []) {
     };
   }
 }
-
