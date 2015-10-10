@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-class="bgClass">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="fragment" content="!">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <!-- <meta property="og:title" content="{{title}}"> -->
+    <base href="/">
+    <title ng-bind="$root.title"><<title>></title>
+    <<#env>>
+    <!-- ENVIRONMENT: <<env>> -->
+    <</env>>
+    <<#styles>>
+    <link href="<<.>>" rel="stylesheet" type="text/css">
+    <</styles>>
+    <link rel="apple-touch-icon" href="/img/mobile/icon.png">
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="image_src" href="/img/logo.jpg">
+  </head>
+  <body>
+    <noscript><div class="error box" style="font-size: 1.5em;"><mark>Warning!</mark> Please enable JavaScript. Our site will not display information or function properly without it.</div></noscript>
+    <!--[if lt IE 9]><div class="error box"><mark>Error!</mark> Sorry, your internet browser is no longer supported. Pages will not display properly and functions will be unavailable. <a href="http://browsehappy.com" target="_blank">Upgrade for free now!</a></div><![endif]-->
