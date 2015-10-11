@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node index",
-    "watch": "nodemon index",
+    "watch": "nodemon index.js -e js,yaml,json,html",
     "site": "gulp site",
     "test": "eslint ."
   },

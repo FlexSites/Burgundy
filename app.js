@@ -6,7 +6,6 @@ import cors from 'cors';
 import debug from 'debug';
 import { json } from 'body-parser';
 import stormpath from 'express-stormpath';
-import Promise from 'bluebird';
 
 // Documentation
 import swaggerize from 'swaggerize-express';
@@ -37,7 +36,7 @@ var log = debug('flexsites:boot');
 log.log = console.log.bind(console);
 var err = debug('flexsites:boot:error');
 
-var app = express();
+export let app = express();
 
 app.use(cors());
 
@@ -57,53 +56,51 @@ app.use(stormpathInit(app));
 // Inject current requests site
 app.use(siteInjector(app));
 
-Promise.all([
-  swaggerDocs(DOCS_DIR),
-])
-.then(([api]) => {
+export default swaggerDocs(DOCS_DIR)
+  .then(api => {
 
-  // Health Check
-  app.get('/ping', (req, res) => res.send({ pong: true }));
+    // Health Check
+    app.get('/ping', (req, res) => res.send({ pong: true }));
 
-  // XPRMNTL
-  // app.use(featureClient.express, featureClient.toggle);
+    // XPRMNTL
+    // app.use(featureClient.express, featureClient.toggle);
 
-  // Check that they're in the right group
-  app.use((req, res, next) => {
-    if (req.flex.site.host !== 'admin.flexsites.io') return next();
-    stormpath.groupsRequired(['Site Owner', 'Admin'], false)(req, res, next);
+    // Check that they're in the right group
+    app.use((req, res, next) => {
+      if (req.flex.site.host !== 'admin.flexsites.io') return next();
+      stormpath.groupsRequired(['Site Owner', 'Admin'], false)(req, res, next);
+    });
+
+    // API
+    app.use(swaggerize({
+      api,
+      docspath: SWAGGER_URI,
+      handlers: ROUTES_DIR,
+    }));
+
+    app.use('/api/:version', mongoose({
+      url: process.env.MONGOLAB_URI,
+      dir: path.join(__dirname, 'models'),
+    }));
+
+    // Page Render
+    app.get('/:resource?/:id?', pageRender(app));
+
+    app.use((err, req, res, next) => {
+      console.error(err.message);
+      console.error(err.stack);
+      res.status(err.status || 500).send(err.message || 'Server error.');
+    });
+
+    app.listen(PORT, () => {
+      let sites = 'all FlexSites';
+      if (process.env.OVERRIDE_HOST) sites = `site: "${process.env.OVERRIDE_HOST}"`;
+      log(`Environment: ${ENV}`);
+      log(`Listening on port ${PORT}`);
+      log(`Serving ${sites}`);
+    });
+  })
+  .catch(ex => {
+    err('Startup failed', ex.message, ex.status, ex.stack);
+    throw new Error(ex);
   });
-
-  // API
-  app.use(swaggerize({
-    api,
-    docspath: SWAGGER_URI,
-    handlers: ROUTES_DIR,
-  }));
-
-  app.use('/api/:version', mongoose({
-    url: process.env.MONGOLAB_URI,
-    dir: path.join(__dirname, 'models'),
-  }));
-
-  // Page Render
-  app.get('/:resource?/:id?', pageRender(app));
-
-  app.use((err, req, res, next) => {
-    console.error(err.message);
-    console.error(err.stack);
-    res.status(err.status || 500).send(err.message || 'Server error.');
-  });
-
-  app.listen(PORT, () => {
-    let sites = 'all FlexSites';
-    if (process.env.OVERRIDE_HOST) sites = `site: "${process.env.OVERRIDE_HOST}"`;
-    log(`Environment: ${ENV}`);
-    log(`Listening on port ${PORT}`);
-    log(`Serving ${sites}`);
-  });
-})
-.catch(ex => {
-  err('Startup failed', ex.message, ex.status, ex.stack);
-  throw new Error(ex);
-});
