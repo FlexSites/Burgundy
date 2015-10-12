@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import merge from 'lodash.merge';
 import jade from 'jade';
 
 export default function(req, res, next) {

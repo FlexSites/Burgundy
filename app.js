@@ -1,7 +1,6 @@
 import config from 'config';
 import path from 'path';
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import debug from 'debug';
 import { json } from 'body-parser';
@@ -43,7 +42,6 @@ app.use(cors());
 // Redirect Apex domains to www
 app.use(wwwRedirect());
 
-app.use(cookieParser());
 app.use(json({ extended: true }));
 app.use(hostInjector(app));
 
