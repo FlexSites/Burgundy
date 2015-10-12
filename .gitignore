@@ -1,0 +1,16 @@
+.env
+*.doc
+*.ejs
+*.log
+*.m4a
+*.m4v
+*.map
+*.psd
+*.psd
+*.rdb
+*.scssc
+*.tif
+*.ts
+*.zip
+*.zip
+node_modules
