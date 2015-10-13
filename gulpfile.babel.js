@@ -32,7 +32,7 @@ function startServer(site) {
 
   nodemon({
     script: 'index.js',
-    ext: 'js',
+    ext: 'js,json,html,yaml',
     env: {
       OVERRIDE_HOST: site,
     },
