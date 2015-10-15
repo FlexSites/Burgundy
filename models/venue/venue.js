@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { slugify } from '../../lib/string-util';
 
 let ObjectId = Schema.Types.ObjectId;
 
@@ -31,5 +32,12 @@ export default {
       ref: 'Medium',
       type: ObjectId,
     }],
+  },
+  virtuals: {
+    identifier: {
+      get() {
+        return slugify(this.address.city);
+      },
+    },
   },
 };
