@@ -3,6 +3,11 @@ import { Schema } from 'mongoose';
 
 let ObjectId = Schema.Types.ObjectId;
 
+let dataSchema = new Schema({
+  name: String,
+  query: String,
+});
+
 export default {
   identity: 'site',
   base: 'persisted',
@@ -58,6 +63,7 @@ export default {
     contact_phone: {
       type: String,
     },
+    data: [dataSchema],
     testimonials: {
       ref: 'Testimonial',
       type: ObjectId,
