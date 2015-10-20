@@ -1,5 +1,5 @@
-import routeData from '../lib/api-util';
-import render from '../lib/render-util';
+import routeData from '../lib/render/data';
+import render from '../lib/render';
 
 export default function() {
   return function(req, res, next) {

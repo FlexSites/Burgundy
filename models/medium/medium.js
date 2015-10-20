@@ -44,6 +44,7 @@ export default {
   virtuals: {
     embed: {
       get() {
+        if (this.type !== 'video') return undefined;
         let id = getYoutubeId(this.src);
         if (id) return `https://www.youtube.com/embed/${id}`;
       },
