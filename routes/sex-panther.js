@@ -1,4 +1,4 @@
-import { clearTemplate } from '../lib/api-util';
+import { clearTemplate } from '../lib/render/data';
 
 export default {
   get: (req, res) => {
