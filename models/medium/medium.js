@@ -67,7 +67,7 @@ export default {
           return ins;
         })
         .then(() => getModels('medium'))
-        .then(Media => Media.update({ id: ins.id }, ins))
+        .then(Media => Media.update({ _id: ins._id || ins.id }, ins))
         .then(() => ins);
     },
     afterDelete: (ins) => {
