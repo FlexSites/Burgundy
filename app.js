@@ -37,6 +37,7 @@ var err = debug('flexsites:boot:error');
 
 export let app = express();
 
+app.set('etag', 'strong');
 app.use(cors());
 
 // Redirect Apex domains to www
