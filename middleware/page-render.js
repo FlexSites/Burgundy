@@ -31,8 +31,7 @@ export default function() {
       return response.then(res.send.bind(res));
     }
 
-    res.set('ETag', expected);
-    res.send();
+    res.sendStatus(304);
   };
 }
 
