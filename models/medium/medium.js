@@ -63,7 +63,7 @@ export default {
       return assign(ins.src, ins.id, req.flex.site.host)
         .then(({ to }) => {
           ins.src = to;
-          transform(ins.type, ins.src);
+          transform(ins);
           return ins;
         })
         .then(() => getModels('medium'))
