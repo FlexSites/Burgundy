@@ -1,6 +1,6 @@
 {
   "name": "flex-sites",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "FlexSites API/Server",
   "main": "index.js",
   "repository": {
