@@ -1,0 +1,10 @@
+get:
+  summary: Describe endpoints
+  tags:
+    - Default
+  description: |
+    Return an array of objects describing API endpoints
+  responses:
+    200:
+      description: |
+        Returns the given contact
