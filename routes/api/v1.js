@@ -1,4 +1,3 @@
-
 import getModels from '../../lib/db';
 
 export default {
@@ -7,5 +6,5 @@ export default {
       .then(Object.keys)
       .then(res.send.bind(res))
       .catch(next);
-  }
+  },
 }
