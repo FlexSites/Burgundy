@@ -1,0 +1,17 @@
+get:
+  summary: Get an entertainer by ID
+  tags:
+    - Entertainer
+  parameters:
+    - name: id
+      in: path
+      description: The entertainer ID
+      type: string
+      required: true
+  responses:
+    200:
+      description: |
+        Returns an entertainer or empty object
+      schema:
+        type: object
+        $ref: '#/definitions/Entertainer'

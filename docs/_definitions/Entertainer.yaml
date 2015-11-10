@@ -1,0 +1,26 @@
+properties:
+  id:
+    type: string
+  credits:
+    type: string
+    description: Noteworthy things about this entertainer
+  description:
+    type: string
+    description: Bio or short summary
+  social:
+    type: object
+    $ref: '#/definitions/Social'
+  images:
+    type: array
+    items:
+      type: object
+      $ref: '#/definitions/Image'
+  verified:
+    type: boolean
+    description: Whether or not this entertainer has been verified by FlexSites
+  events:
+    type: array
+    items:
+      type: object
+      $ref: '#/definitions/Event'
+

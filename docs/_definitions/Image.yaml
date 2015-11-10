@@ -1,0 +1,33 @@
+properties:
+  id:
+    type: string
+  type:
+    type: string
+    description: Noteworthy things about this entertainer
+    enum:
+      - hero
+      - profile
+      - background
+      - ad
+      - other
+    required: true
+  subtype:
+    type: string
+  filetype:
+    type: string
+    enum:
+      - image/jpeg
+      - image/png
+      - image/gif
+      - image/svg+xml
+  name:
+    type: string
+    required: true
+  source:
+    type: string
+    description: Full URL of location of the image
+    required: true
+  description:
+    type: string
+    description: Bio or short summary
+

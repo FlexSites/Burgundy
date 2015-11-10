@@ -1,0 +1,16 @@
+properties:
+  id:
+    type: provider
+    enum:
+      - facebook
+      - twitter
+      - googleplus
+      - instagram
+      - linkedin
+      - pinterest
+  url:
+    type: string
+    description: Full URL to social provider
+  label:
+    type: string
+    description: Description of social provider i.e. "Facebook"
